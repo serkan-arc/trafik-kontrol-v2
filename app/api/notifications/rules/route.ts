@@ -1,9 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { Pool } from 'pg'
-
-const pool = new Pool({
-  connectionString: process.env.DATABASE_URL
-})
+import { db } from '@/lib/db'
 
 // GET - List all notification rules
 export async function GET(request: NextRequest) {
@@ -23,7 +19,7 @@ export async function GET(request: NextRequest) {
     
     query += ' ORDER BY priority DESC, created_at DESC'
     
-    const result = await pool.query(query, params)
+    const result = await db.query(query, params)
     
     return NextResponse.json({
       success: true,
@@ -75,7 +71,7 @@ export async function POST(request: NextRequest) {
       RETURNING *
     `
     
-    const result = await pool.query(query, [
+    const result = await db.query(query, [
       rule_name,
       description,
       event_types,
@@ -154,7 +150,7 @@ export async function PUT(request: NextRequest) {
       RETURNING *
     `
     
-    const result = await pool.query(query, params)
+    const result = await db.query(query, params)
     
     if (result.rows.length === 0) {
       return NextResponse.json(
@@ -189,7 +185,7 @@ export async function DELETE(request: NextRequest) {
       )
     }
     
-    const result = await pool.query(
+    const result = await db.query(
       'DELETE FROM notification_rules WHERE id = $1 RETURNING *',
       [id]
     )

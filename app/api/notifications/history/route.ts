@@ -1,9 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { Pool } from 'pg'
-
-const pool = new Pool({
-  connectionString: process.env.DATABASE_URL
-})
+import { db } from '@/lib/db'
 
 // GET - List notification history with filtering and pagination
 export async function GET(request: NextRequest) {
@@ -56,15 +52,15 @@ export async function GET(request: NextRequest) {
     }
     
     // Count total for pagination
-    const countQuery = query.replace('SELECT nh.*, nr.rule_name, nc.channel_name, nc.channel_type', 'SELECT COUNT(*)')
-    const countResult = await pool.query(countQuery, params)
-    const total = parseInt(countResult.rows[0].count)
+    const countQuery = query.replace('SELECT nh.*, nr.rule_name, nc.channel_name, nc.channel_type', 'SELECT COUNT(*) as count')
+    const countResult = await db.query(countQuery, params)
+    const total = parseInt(countResult.rows[0]?.count || '0')
     
     // Add pagination
     query += ` ORDER BY nh.created_at DESC LIMIT $${paramIndex} OFFSET $${paramIndex + 1}`
     params.push(limit, offset)
     
-    const result = await pool.query(query, params)
+    const result = await db.query(query, params)
     
     // Calculate statistics
     const statsQuery = `
@@ -77,7 +73,7 @@ export async function GET(request: NextRequest) {
       FROM notification_history
       WHERE created_at > NOW() - INTERVAL '24 hours'
     `
-    const statsResult = await pool.query(statsQuery)
+    const statsResult = await db.query(statsQuery)
     
     return NextResponse.json({
       success: true,

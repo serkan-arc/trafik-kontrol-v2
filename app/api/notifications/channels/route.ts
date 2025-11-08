@@ -1,9 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { Pool } from 'pg'
-
-const pool = new Pool({
-  connectionString: process.env.DATABASE_URL
-})
+import { db } from '@/lib/db'
 
 // GET - List all notification channels
 export async function GET(request: NextRequest) {
@@ -30,7 +26,7 @@ export async function GET(request: NextRequest) {
     
     query += ' ORDER BY created_at DESC'
     
-    const result = await pool.query(query, params)
+    const result = await db.query(query, params)
     
     // Mask sensitive data in config
     const channels = result.rows.map(channel => ({
@@ -84,7 +80,7 @@ export async function POST(request: NextRequest) {
       RETURNING *
     `
     
-    const result = await pool.query(query, [
+    const result = await db.query(query, [
       channel_name,
       channel_type,
       JSON.stringify(config),
@@ -148,7 +144,7 @@ export async function PUT(request: NextRequest) {
       RETURNING *
     `
     
-    const result = await pool.query(query, params)
+    const result = await db.query(query, params)
     
     if (result.rows.length === 0) {
       return NextResponse.json(
@@ -183,7 +179,7 @@ export async function DELETE(request: NextRequest) {
       )
     }
     
-    const result = await pool.query(
+    const result = await db.query(
       'DELETE FROM notification_channels WHERE id = $1 RETURNING *',
       [id]
     )
