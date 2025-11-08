@@ -1,0 +1,88 @@
+'use client';
+
+import { useState, useEffect } from 'react';
+
+export default function AutoRulesPage() {
+  const [rules, setRules] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetchRules();
+  }, []);
+
+  const fetchRules = async () => {
+    try {
+      const res = await fetch('/api/traffic/rules');
+      const data = await res.json();
+      if (data.success && Array.isArray(data.data)) {
+        setRules(data.data);
+      } else {
+        setRules([]);
+      }
+    } catch (error) {
+      console.error('Error fetching rules:', error);
+      setRules([]);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <div className="space-y-6">
+      <div className="flex items-center justify-between">
+        <div>
+          <h1 className="text-3xl font-bold text-gray-900">Auto Rules</h1>
+          <p className="text-gray-600 mt-2">Koşul bazlı otomatik kararlar</p>
+        </div>
+        <button className="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700">
+          Yeni Kural Oluştur
+        </button>
+      </div>
+
+      {loading ? (
+        <div className="text-center py-12">
+          <div className="text-xl">Kurallar yükleniyor...</div>
+        </div>
+      ) : (
+        <div className="bg-white rounded-lg shadow">
+          <div className="p-6">
+            <h2 className="text-xl font-semibold mb-4">Aktif Kurallar ({rules.length})</h2>
+            {!Array.isArray(rules) || rules.length === 0 ? (
+              <div className="text-center py-8 text-gray-500">
+                Henüz kural tanımlanmamış. Yeni kural oluşturmak için yukarıdaki butonu kullanın.
+              </div>
+            ) : (
+              <div className="space-y-4">
+                {rules.map((rule: any) => (
+                  <div key={rule.id} className="border border-gray-200 rounded-lg p-4">
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <h3 className="font-semibold text-lg">{rule.rule_name}</h3>
+                        <p className="text-sm text-gray-600">{rule.description}</p>
+                        <div className="mt-2">
+                          <span className={`px-2 py-1 text-xs rounded ${
+                            rule.action === 'blacklist' ? 'bg-red-100 text-red-800' :
+                            rule.action === 'graylist' ? 'bg-yellow-100 text-yellow-800' :
+                            'bg-green-100 text-green-800'
+                          }`}>
+                            {rule.action}
+                          </span>
+                          <span className="ml-2 text-sm text-gray-500">
+                            Priority: {rule.priority}
+                          </span>
+                        </div>
+                      </div>
+                      <div className="text-sm text-gray-500">
+                        {rule.is_active ? '✅ Active' : '❌ Inactive'}
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}

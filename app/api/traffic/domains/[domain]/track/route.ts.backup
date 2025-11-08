@@ -1,0 +1,265 @@
+import { NextRequest, NextResponse } from 'next/server'
+import { db } from '@/lib/db'
+import { RedisManager } from '@/lib/redis-manager'
+
+const redisManager = RedisManager.getInstance()
+
+type RouteContext = {
+  params: Promise<{ domain: string }>
+}
+
+// POST - Track traffic for specific domain
+export async function POST(request: NextRequest, context: RouteContext) {
+  try {
+    const { domain } = await context.params
+    const { ip, userAgent, path, method, referer, country, city } = await request.json()
+
+    // Check rate limit first (Redis)
+    const rateLimit = await redisManager.checkRateLimit(`${domain}:${ip}`, 'ip')
+    if (!rateLimit.allowed) {
+      return NextResponse.json(
+        { 
+          success: false, 
+          error: 'Rate limit exceeded',
+          remaining: rateLimit.remaining,
+          resetIn: rateLimit.resetIn 
+        },
+        { status: 429 }
+      )
+    }
+
+    // Check if IP is blacklisted (Redis cache first)
+    const isBlacklisted = await redisManager.isBlacklisted(domain, ip)
+    if (isBlacklisted) {
+      // Track blocked threat
+      return NextResponse.json(
+        { success: false, action: 'blocked', reason: 'IP blacklisted (cached)' },
+        { status: 403 }
+      )
+    }
+
+    // Check if whitelisted (Redis cache)
+    const isWhitelisted = await redisManager.isWhitelisted(domain, ip)
+
+    // Try to get domain settings from cache first
+    let domainData = await redisManager.getDomainSettings(domain)
+    
+    if (!domainData) {
+      // Cache miss, get from database
+      const domainResult = await db.query(
+        'SELECT id, db_schema, traffic_settings FROM master_domains WHERE domain = $1 AND status = $2',
+        [domain, 'active']
+      )
+
+      if (!domainResult.rows[0]) {
+        return NextResponse.json(
+          { success: false, error: 'Domain not found or inactive' },
+          { status: 404 }
+        )
+      }
+
+      domainData = domainResult.rows[0]
+      // Cache for next time
+      await redisManager.setDomainSettings(domain, domainData)
+    }
+
+    const dbSchema = domainData.db_schema
+    const settings = domainData.traffic_settings
+
+    // Check if IP should be blocked based on domain settings (already checked Redis above)
+    if (!isWhitelisted && settings?.ip_rules?.blacklist?.includes(ip)) {
+      // Add to Redis blacklist for faster future checks
+      await redisManager.addToBlacklist(domain, ip, 'Domain settings')
+      
+      // Log blocked attempt
+      await db.query(`
+        INSERT INTO master_traffic_log 
+        (domain, domain_id, ip, country, city, path, method, action_taken, timestamp)
+        VALUES ($1, $2, $3, $4, $5, $6, $7, 'blocked', NOW())
+      `, [domain, domainData.id, ip, country, city, path, method])
+
+      // Track blocked threat
+
+      return NextResponse.json(
+        { success: false, action: 'blocked', reason: 'IP blacklisted' },
+        { status: 403 }
+      )
+    }
+
+    // Bot detection (check Redis cache first)
+    let isBot = false
+    const cachedBotStatus = await redisManager.getBotStatus(domain, ip)
+    
+    if (cachedBotStatus) {
+      isBot = cachedBotStatus.confidence > 50
+    } else if (settings?.bot_detection?.enabled && !isWhitelisted) {
+      // Simple bot detection based on user agent
+      const botPatterns = [
+        /bot/i, /spider/i, /crawl/i, /scraper/i, /python/i, 
+        /wget/i, /curl/i, /postman/i
+      ]
+      isBot = botPatterns.some(pattern => pattern.test(userAgent || ''))
+      
+      // Cache bot detection result
+      if (isBot) {
+        await redisManager.flagAsBot(domain, ip, 80)
+      }
+    }
+    
+    if (isBot && settings?.bot_detection?.block_suspicious) {
+        // Log bot detection
+        await db.query(`
+          INSERT INTO "${dbSchema}_bot_detection_log" 
+          (ip, detection_type, confidence_score, action_taken, details, detected_at)
+          VALUES ($1, 'user_agent', 80, 'blocked', $2, NOW())
+        `, [ip, { userAgent }])
+
+        // Log to master
+        await db.query(`
+          INSERT INTO master_traffic_log 
+          (domain, domain_id, ip, country, city, path, method, is_bot, action_taken, timestamp)
+          VALUES ($1, $2, $3, $4, $5, $6, $7, true, 'blocked', NOW())
+        `, [domain, domainData.id, ip, country, city, path, method])
+
+        await redisManager.updateRealtimeStats(domain, 'bot')
+        
+        return NextResponse.json(
+          { success: false, action: 'blocked', reason: 'Bot detected' },
+          { status: 403 }
+        )
+      }
+    }
+
+    // Update real-time visitor stats in Redis
+    // Update real-time stats
+    await redisManager.setTrafficStats(domain, 'realtime', {
+      ip,
+      timestamp: new Date().toISOString(),
+      type: 'visit'
+    })
+
+    // Track in domain-specific table
+    await db.query(`
+      INSERT INTO "${dbSchema}_ip_tracking" 
+      (ip, country, country_name, city, user_agent, visit_count, last_seen)
+      VALUES ($1, $2, $3, $4, $5, 1, NOW())
+      ON CONFLICT (ip) DO UPDATE SET
+        visit_count = ip_tracking.visit_count + 1,
+        last_seen = NOW()
+    `, [ip, country, country, city, userAgent])
+
+    // Track visit history
+    await db.query(`
+      INSERT INTO "${dbSchema}_ip_visit_history" 
+      (ip, page_url, referer, user_agent, is_bot, visit_timestamp)
+      VALUES ($1, $2, $3, $4, $5, NOW())
+    `, [ip, path, referer, userAgent, isBot])
+
+    // Log to master traffic log
+    await db.query(`
+      INSERT INTO master_traffic_log 
+      (domain, domain_id, ip, country, city, path, method, is_bot, action_taken, timestamp)
+      VALUES ($1, $2, $3, $4, $5, $6, $7, $8, 'allowed', NOW())
+    `, [domain, domainData.id, ip, country, city, path, method, isBot])
+
+    // Update domain stats
+    await db.query(`
+      UPDATE master_domains 
+      SET 
+        total_visits = total_visits + 1,
+        total_bots_blocked = total_bots_blocked + CASE WHEN $1 THEN 1 ELSE 0 END,
+        last_traffic_at = NOW(),
+        updated_at = NOW()
+      WHERE id = $2
+    `, [isBot, domainData.id])
+
+    // Update hourly stats
+    await db.query(`
+      INSERT INTO "${dbSchema}_traffic_stats" 
+      (domain_id, domain, date, hour, total_requests, unique_visitors, bot_requests)
+      VALUES ($1, $2, CURRENT_DATE, EXTRACT(HOUR FROM NOW()), 1, 1, $3)
+      ON CONFLICT (domain_id, date, hour) DO UPDATE SET
+        total_requests = "${dbSchema}_traffic_stats".total_requests + 1,
+        bot_requests = "${dbSchema}_traffic_stats".bot_requests + CASE WHEN $3 THEN 1 ELSE 0 END
+    `, [domainData.id, domain, isBot ? 1 : 0])
+
+    return NextResponse.json({
+      success: true,
+      tracked: true,
+      domain,
+      action: 'allowed',
+      isBot,
+      isWhitelisted
+    })
+
+  } catch (error: any) {
+    console.error('Error tracking domain traffic:', error)
+    return NextResponse.json(
+      { success: false, error: error.message },
+      { status: 500 }
+    )
+  }
+}
+
+// GET - Get domain traffic stats
+export async function GET(request: NextRequest, context: RouteContext) {
+  try {
+    const { domain } = await context.params
+    const { searchParams } = new URL(request.url)
+    const days = parseInt(searchParams.get('days') || '7')
+
+    // Get domain info
+    const domainResult = await db.query(
+      'SELECT * FROM master_domains WHERE domain = $1',
+      [domain]
+    )
+
+    if (!domainResult.rows[0]) {
+      return NextResponse.json(
+        { success: false, error: 'Domain not found' },
+        { status: 404 }
+      )
+    }
+
+    const domainData = domainResult.rows[0]
+    const dbSchema = domainData.db_schema
+
+    // Get stats from domain-specific tables
+    const stats = await db.query(`
+      SELECT 
+        COUNT(DISTINCT ip) as unique_visitors,
+        COUNT(*) as total_visits,
+        SUM(CASE WHEN is_bot THEN 1 ELSE 0 END) as bot_visits
+      FROM "${dbSchema}_ip_visit_history"
+      WHERE visit_timestamp > NOW() - INTERVAL '${days} days'
+    `)
+
+    // Get top IPs
+    const topIPs = await db.query(`
+      SELECT 
+        ip, 
+        COUNT(*) as visits,
+        MAX(visit_timestamp) as last_visit
+      FROM "${dbSchema}_ip_visit_history"
+      WHERE visit_timestamp > NOW() - INTERVAL '${days} days'
+      GROUP BY ip
+      ORDER BY visits DESC
+      LIMIT 10
+    `)
+
+    return NextResponse.json({
+      success: true,
+      domain,
+      stats: stats.rows[0],
+      topIPs: topIPs.rows,
+      settings: domainData.traffic_settings
+    })
+
+  } catch (error: any) {
+    console.error('Error fetching domain stats:', error)
+    return NextResponse.json(
+      { success: false, error: error.message },
+      { status: 500 }
+    )
+  }
+}

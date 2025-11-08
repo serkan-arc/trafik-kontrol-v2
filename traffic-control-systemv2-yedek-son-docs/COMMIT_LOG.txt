@@ -1,0 +1,291 @@
+16ca32c08354c7ea46295e8db15688d12161dace
+serkandogan34 <serkandogan34@users.noreply.github.com>
+2025-11-06 16:56:10 +0100
+feat: add comprehensive GeoIP integration
+- Complete GeoIP service with multiple providers
+- IPinfo.io API support (primary, most accurate)
+- IP-API.com free fallback (45 req/min limit)
+- In-memory caching with 24-hour TTL
+- Country and city detection
+- Region and timezone information
+- ISP and ASN details
+- VPN/Proxy/Tor detection
+- Hosting and mobile detection
+- Latitude/longitude coordinates
+- Private/local IP handling
+- Batch lookup support with concurrency control
+- Country flag emoji generation
+- Country name mapping
+- High-risk country identification
+- Distance calculation between coordinates
+- GeoIP lookup API endpoint
+- Single IP and batch IP support
+- Client IP detection from headers
+- Testing and configuration UI
+- Status cards showing provider and features
+- API key configuration guide
+- Test lookup tool with My IP button
+- Security flags visualization
+- Map location preview with Google Maps link
+- Usage examples for server-side and client-side
+- Added GeoIP link to sidebar navigation
+
+---
+05f2946e9e941d00943dfe06030896b7065b4df2
+serkandogan34 <serkandogan34@users.noreply.github.com>
+2025-11-06 16:52:41 +0100
+feat: add comprehensive API rate limiting system
+- Complete rate limiter library with multiple strategies
+- Fixed window, sliding window, and token bucket algorithms
+- Redis support with in-memory fallback
+- IP-based client identification with header support
+- Configurable rate limit presets (strict, standard, relaxed, per-second)
+- Rate limit middleware factory for easy integration
+- Automatic rate limit headers (X-RateLimit-*)
+- Retry-After header for 429 responses
+- Rate limiting configuration UI
+- Visual dashboard with active configs
+- Create/edit/delete configurations
+- Toggle enable/disable per config
+- Strategy selection with descriptions
+- Time window formatting (ms/s/min/h)
+- Applies-to pattern matching for API routes
+- Implementation guide with code examples
+- Example rate-limited API endpoint
+- Demonstrates GET and POST with different limits
+- Redis connection pooling and error handling
+- Per-endpoint customization
+- Support for skip conditions
+- Custom key generators
+- Added Rate Limiting link to sidebar
+
+---
+ecf2b5af6b6e952b36eeea3f2d387f364a134a55
+serkandogan34 <serkandogan34@users.noreply.github.com>
+2025-11-06 16:48:38 +0100
+feat: add comprehensive email notification system
+- Complete notification infrastructure with database tables
+- Notification channels management (Email, Slack, Webhook, Telegram, SMS)
+- Notification rules with event filtering and severity levels
+- Notification history tracking with statistics
+- Email templates with HTML support
+- Throttling system to prevent notification spam
+- Three-tab UI: Channels, Rules, History
+- Channel configuration with SMTP settings
+- Rule creation with event types and recipients
+- 24-hour statistics dashboard
+- Toggle enable/disable for channels and rules
+- Priority-based rule execution
+- Default email templates for common events
+- Support for multiple delivery channels
+- Recipient email management
+- Affected domains filtering
+- Event type options: mass_attack, ddos_attempt, brute_force, etc.
+- Throttle window configuration (time and count)
+- Status tracking: pending, sent, failed, throttled
+- Comprehensive API endpoints for CRUD operations
+- Migration 009 with complete schema
+
+---
+748d23e9e8f0db9d8c465a859cdbb31d8abca79e
+serkandogan34 <serkandogan34@users.noreply.github.com>
+2025-11-06 16:43:49 +0100
+feat: add comprehensive analytics dashboard
+- Advanced analytics API with multiple metrics
+- Overview: Total requests, bot requests, threats, response time
+- Security: Events tracking, IP reputation, rule triggers
+- Threats: Bot statistics, spam statistics, attacking IPs
+- Interactive charts using Chart.js and react-chartjs-2
+- Time range selection (24h, 7d, 30d)
+- Four-tab interface: Overview, Security, Threats, Geographic
+- Traffic trend visualization with multi-line charts
+- Top domains ranking
+- Security events timeline with severity indicators
+- Event type statistics table
+- Bot activity breakdown by type
+- Spam activity analysis by form type
+- Top attacking IPs with reputation scores
+- VPN/Proxy/Tor detection flags
+- Auto-mitigation tracking
+- Real-time statistics from global tables
+- Responsive design with gradient cards
+- Added Analytics link to sidebar navigation
+- Installed Chart.js dependencies
+
+---
+807c810bac0920b4bbb4c46fa1dc50cf2cd4e181
+serkandogan34 <serkandogan34@users.noreply.github.com>
+2025-11-06 16:39:02 +0100
+feat: add spam control UI and API endpoints
+- Comprehensive spam pattern management interface
+- Two tabs: Spam Patterns and Detection Logs
+- Statistics dashboard (total patterns, severity distribution, matches)
+- Pattern CRUD operations with modal form
+- Detection logs table with filtering
+- Toggle enable/disable for patterns
+- Severity-based color coding (High/Medium/Low)
+- Action-based badges (flag/block/quarantine/log_only)
+- Pattern types: keyword, email_domain, url_pattern, content_hash, behavior
+- Regex support for pattern matching
+- False positive tracking
+- Disposable email detection in logs
+- Multi-pattern matching per detection
+- 24-hour statistics for detections
+- API endpoints for patterns and detections
+- Complete filtering and pagination support
+
+---
+c9417f282f1f6712cf25089519ff508bd93405f2
+serkandogan34 <serkandogan34@users.noreply.github.com>
+2025-11-06 16:33:40 +0100
+feat: implement comprehensive global management system
+COMPLETE GLOBAL MANAGEMENT INFRASTRUCTURE:
+
+1. DATABASE SCHEMA (Migration 008):
+   - global_ip_reputation: IP reputation tracking with 0-100 scoring
+   - global_auto_rules: Priority-based automated security rules
+   - global_bot_patterns: Bot detection pattern database
+   - global_spam_patterns: Spam detection pattern database
+   - global_ip_activity_hourly: Hourly aggregated IP activity logs
+   - global_bot_detections: Bot detection event logs
+   - global_spam_detections: Spam detection event logs
+   - global_rule_triggers: Auto rule trigger logs
+
+2. NGINX LOG PARSER V2 (OPERATIONAL):
+   - Real-time log processing with global tables integration
+   - Automated IP reputation scoring and classification
+   - Bot detection with pattern matching
+   - Spam detection with pattern matching
+   - Auto rules checking (7 rule types, priority-based)
+   - Hourly activity aggregation for performance
+   - Comprehensive logging with visual indicators
+   - Background daemon running (PID: 3823446)
+
+3. GLOBAL IP MANAGEMENT:
+   - UI: Comprehensive IP management interface
+   - API: Full CRUD operations with filtering and pagination
+   - Features: Reputation scores, list types, ban management
+   - Detection: VPN, Proxy, Tor, Datacenter identification
+   - Auto-classification: Whitelist/Graylist/Blacklist based on behavior
+
+4. AUTO RULES ENGINE:
+   - UI: Two-tab interface (Rules & Triggers)
+   - API: Complete rule management (GET, POST, PUT, DELETE)
+   - Rule Types: rate_limit, path_blocking, geo_blocking, user_agent,
+                ip_range, header_check, time_based
+   - Actions: allow, block, drop, challenge, rate_limit, log_only
+   - Priority-based execution with domain targeting
+
+5. BOT DETECTION SYSTEM:
+   - UI: Bot pattern management and detection logs
+   - API: Pattern CRUD and detection log queries
+   - Features: Good/Bad/Unknown classification
+   - Patterns: User-agent regex, IP ranges, categories
+   - Pre-loaded: 9 common bot patterns (Googlebot, Bingbot, scrapers)
+   - Statistics: Detection counts, enabled status, verification
+
+6. SPAM CONTROL SYSTEM:
+   - API: Spam pattern management and detection logs
+   - Patterns: Content regex, IP ranges, severity levels
+   - Actions: Block, quarantine, flag, allow
+   - Integration: Ready for UI implementation
+
+7. TRAFFIC OVERVIEW ENHANCEMENTS:
+   - Transformed Live Activity from table to X-Y axis area chart
+   - 30-second time buckets for scalable visualization
+   - Normal/Suspicious traffic separation with gradients
+   - Aggregated data across all domains
+
+8. SIDEBAR REORGANIZATION:
+   - Added Bot Detection and Spam Control to global management
+   - Removed redundant menu items
+   - Clean hierarchy: IP Management, Auto Rules, Bot Detection,
+                      Spam Control, System Settings, Users, Notifications
+
+READY FOR PRODUCTION:
+- All database tables created and indexed
+- All APIs operational and tested
+- Nginx parser deployed and processing logs in real-time
+- IP reputation auto-scoring working
+- Bot detection active
+- Auto rules checking enabled
+- UI pages for IP Management, Auto Rules, and Bot Detection complete
+
+NEXT TASKS:
+- Spam Control UI (Task 2/6)
+- Dashboard Analytics (Task 3/6)
+- Email Notifications (Task 4/6)
+- API Rate Limiting (Task 5/6)
+- GeoIP Integration (Task 6/6)
+
+---
+758c06623eb451ccd809418392e3818643961f8d
+serkandogan34 <genspark_dev@genspark.ai>
+2025-10-19 07:30:25 +0000
+feat(api): Complete Phase 3 API LAYER implementation
+Phase 3: API LAYER - REST API Endpoints (100% Complete)
+
+Controllers Implemented (6):
+- BaseController: HTTP response methods, pagination, validation helpers
+- DomainController: Complete domain management REST API
+- TrafficController: Traffic routing and logging API
+- AnalyticsController: Analytics and reporting API
+- BotDetectionController: Bot detection analysis API
+- HealthController: System health check API
+
+Middleware Implemented (5):
+- errorHandler: Global error handling with specific error types
+- rateLimiter: In-memory rate limiting (100 req/min default)
+- requestLogger: Request/response logging with timing
+- validateRequest: Schema-based request validation
+- cors: CORS configuration for API access
+
+Routes Configured:
+- /api/v1/domains - Domain management (CRUD + stats)
+- /api/v1/traffic - Traffic routing and logging
+- /api/v1/analytics - Analytics and reporting
+- /api/v1/bot-detection - Bot detection analysis
+- /api/v1/health - Health checks
+
+Key Features:
+✅ RESTful API design with proper HTTP methods
+✅ Comprehensive error handling and validation
+✅ Rate limiting and CORS support
+✅ Pagination support for list endpoints
+✅ Detailed API responses with success/error format
+✅ Request logging and monitoring
+✅ Express.js server with modular architecture
+
+Files Added:
+- api/controllers/BaseController.js (7.6 KB)
+- api/controllers/DomainController.js (9.2 KB)
+- api/controllers/TrafficController.js (8.4 KB)
+- api/controllers/AnalyticsController.js (7.1 KB)
+- api/controllers/BotDetectionController.js (5.5 KB)
+- api/controllers/HealthController.js (3.1 KB)
+- api/middleware/errorHandler.js (2.2 KB)
+- api/middleware/rateLimiter.js (3.4 KB)
+- api/middleware/requestLogger.js (1.4 KB)
+- api/middleware/validateRequest.js (4.3 KB)
+- api/middleware/cors.js (1.8 KB)
+- api/routes/* (6 route files)
+- api/server.js (4.7 KB)
+- api/test-api.js (13 KB)
+
+Dependencies Added:
+- express: ^4.x (Web framework)
+- better-sqlite3: ^11.x (Database driver)
+
+Architecture Progress:
+- Phase 1: DATABASE LAYER ✅ (100%)
+- Phase 2: CORE LAYER ✅ (100%)
+- Phase 3: API LAYER ✅ (100%)
+- Overall: 40% → 50% Complete
+
+Next Steps:
+- Integrate all 3 phases (DATABASE + CORE + API)
+- Full end-to-end testing
+- Deploy to sandbox environment
+- Begin Phase 4: MIDDLEWARE LAYER
+
+---

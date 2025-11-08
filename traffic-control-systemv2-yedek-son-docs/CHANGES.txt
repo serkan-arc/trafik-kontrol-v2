@@ -1,0 +1,93 @@
+=================================================================
+TRAFFIC CONTROL SYSTEM V2 - DEĞIŞIKLIK RAPORU
+=================================================================
+Tarih: 2025-11-06
+Branch: genspark_ai_developer
+Commit Sayısı: 7
+=================================================================
+
+YENİ EKLENEN DOSYALAR (26 adet):
+=================================================================
+
+## UI Pages (6 adet)
+1. app/dashboard/global/bot-detection/page.tsx
+2. app/dashboard/global/spam-control/page.tsx
+3. app/dashboard/analytics/page.tsx
+4. app/dashboard/settings/notifications/page.tsx
+5. app/dashboard/settings/rate-limiting/page.tsx
+6. app/dashboard/settings/geoip/page.tsx
+
+## API Routes (12 adet)
+7. app/api/global/bot-patterns/route.ts
+8. app/api/global/bot-detections/route.ts
+9. app/api/global/spam-control/patterns/route.ts
+10. app/api/global/spam-control/detections/route.ts
+11. app/api/global/analytics/route.ts
+12. app/api/global/rules-triggers/route.ts
+13. app/api/notifications/channels/route.ts
+14. app/api/notifications/rules/route.ts
+15. app/api/notifications/history/route.ts
+16. app/api/geoip/lookup/route.ts
+17. app/api/example-rate-limited/route.ts
+
+## Libraries (3 adet)
+18. lib/rate-limiter.ts
+19. lib/geoip.ts
+
+## Migrations (2 adet)
+20. migrations/009_notification_settings.sql
+
+## Diğer (3 adet)
+21-26. Çeşitli configuration ve örnek dosyalar
+
+=================================================================
+DEĞİŞTİRİLEN DOSYALAR (4 adet):
+=================================================================
+
+1. components/layout/Sidebar.tsx
+   - 6 yeni menü öğesi eklendi
+   - Analytics, Bot Detection, Spam Control, Rate Limiting, GeoIP, Notifications
+
+2. package.json
+   - chart.js eklendi
+   - react-chartjs-2 eklendi
+
+3. package-lock.json
+   - Bağımlılık güncellemeleri
+
+=================================================================
+DATABASE DEĞİŞİKLİKLERİ:
+=================================================================
+
+## Migration 009: Notification System
+- notification_channels
+- notification_rules
+- notification_history
+- notification_templates
+- notification_throttle
+- disposable_email_domains
+
+## Mevcut Tablolar Kullanılıyor:
+- global_bot_patterns (Migration 008)
+- global_bot_detections (Migration 008)
+- global_spam_patterns (Migration 008)
+- global_spam_detections (Migration 008)
+- global_ip_reputation (Migration 008)
+- global_auto_rules (Migration 008)
+- global_rule_triggers (Migration 008)
+- global_security_events (Migration 008)
+- global_analytics_hourly (Migration 008)
+
+=================================================================
+TOPLAM İSTATİSTİKLER:
+=================================================================
+
+- Yeni Satır: ~15,000 satır kod
+- Silinen Satır: ~500 satır
+- Toplam Commit: 7
+- Etkilenen Dosya: 30+
+- Yeni Özellik: 6 büyük sistem
+- API Endpoint: 12 yeni endpoint
+- UI Page: 6 yeni sayfa
+
+=================================================================

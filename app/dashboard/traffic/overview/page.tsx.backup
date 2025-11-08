@@ -1,0 +1,319 @@
+'use client';
+
+import { useEffect, useState } from 'react';
+
+interface DashboardStats {
+  overview: {
+    total_ips: number;
+    new_ips: number;
+    total_visits: number;
+    unique_visitors: number;
+    total_form_submissions: number;
+    spam_submissions: number;
+  };
+  lists: {
+    whitelist: number;
+    graylist: number;
+    blacklist: number;
+    unknown?: number;
+  };
+  risk_levels: {
+    [key: string]: {
+      count: number;
+      avg_score: number;
+    };
+  };
+  bots: {
+    verified: number;
+    fake: number;
+    types: number;
+  };
+}
+
+export default function TrafficOverviewPage() {
+  const [stats, setStats] = useState<DashboardStats | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [timeRange, setTimeRange] = useState(7);
+
+  useEffect(() => {
+    fetchStats();
+  }, [timeRange]);
+
+  const fetchStats = async () => {
+    setLoading(true);
+    try {
+      const res = await fetch(`/api/traffic/analytics/dashboard?days=${timeRange}`);
+      const data = await res.json();
+      if (data.success) {
+        setStats(data.data);
+      }
+    } catch (error) {
+      console.error('Failed to fetch stats:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="text-xl">Loading dashboard...</div>
+      </div>
+    );
+  }
+
+  if (!stats) {
+    return <div>Failed to load statistics</div>;
+  }
+
+  const spamRate = stats.overview.total_form_submissions > 0
+    ? ((stats.overview.spam_submissions / stats.overview.total_form_submissions) * 100).toFixed(1)
+    : '0.0';
+
+  return (
+    <div className="p-6 space-y-6">
+      {/* Header */}
+      <div className="flex justify-between items-center">
+        <div>
+          <h1 className="text-3xl font-bold">Traffic Control Dashboard</h1>
+          <p className="text-gray-600 mt-1">Real-time traffic monitoring and analytics</p>
+        </div>
+        <div>
+          <select
+            value={timeRange}
+            onChange={(e) => setTimeRange(Number(e.target.value))}
+            className="px-4 py-2 border rounded-lg"
+          >
+            <option value={1}>Last 24 hours</option>
+            <option value={7}>Last 7 days</option>
+            <option value={30}>Last 30 days</option>
+            <option value={90}>Last 90 days</option>
+          </select>
+        </div>
+      </div>
+
+      {/* Overview Stats */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+        <StatCard
+          title="Total IPs"
+          value={stats.overview.total_ips.toLocaleString()}
+          subtitle={`${stats.overview.new_ips} new`}
+          color="blue"
+          icon="🌐"
+        />
+        <StatCard
+          title="Total Visits"
+          value={stats.overview.total_visits.toLocaleString()}
+          subtitle={`${stats.overview.unique_visitors} unique`}
+          color="green"
+          icon="👁️"
+        />
+        <StatCard
+          title="Form Submissions"
+          value={stats.overview.total_form_submissions.toLocaleString()}
+          subtitle={`${spamRate}% spam rate`}
+          color="purple"
+          icon="📝"
+        />
+        <StatCard
+          title="Spam Detected"
+          value={stats.overview.spam_submissions.toLocaleString()}
+          subtitle="Auto-blocked"
+          color="red"
+          icon="🚫"
+        />
+      </div>
+
+      {/* Lists Distribution */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div className="bg-white rounded-lg shadow p-6">
+          <h2 className="text-xl font-semibold mb-4">IP Lists Distribution</h2>
+          <div className="space-y-3">
+            <ListItem
+              label="Whitelist"
+              count={stats.lists.whitelist}
+              color="green"
+              percentage={(stats.lists.whitelist / stats.overview.total_ips * 100).toFixed(1)}
+            />
+            <ListItem
+              label="Graylist"
+              count={stats.lists.graylist}
+              color="yellow"
+              percentage={(stats.lists.graylist / stats.overview.total_ips * 100).toFixed(1)}
+            />
+            <ListItem
+              label="Blacklist"
+              count={stats.lists.blacklist}
+              color="red"
+              percentage={(stats.lists.blacklist / stats.overview.total_ips * 100).toFixed(1)}
+            />
+            {stats.lists.unknown !== undefined && (
+              <ListItem
+                label="Unknown"
+                count={stats.lists.unknown}
+                color="gray"
+                percentage={(stats.lists.unknown / stats.overview.total_ips * 100).toFixed(1)}
+              />
+            )}
+          </div>
+        </div>
+
+        {/* Risk Levels */}
+        <div className="bg-white rounded-lg shadow p-6">
+          <h2 className="text-xl font-semibold mb-4">Risk Levels</h2>
+          <div className="space-y-3">
+            {Object.entries(stats.risk_levels).map(([level, data]) => (
+              <RiskItem
+                key={level}
+                level={level}
+                count={data.count}
+                avgScore={data.avg_score}
+              />
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* Bot Detection */}
+      <div className="bg-white rounded-lg shadow p-6">
+        <h2 className="text-xl font-semibold mb-4">Bot Detection Summary</h2>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div className="text-center p-4 bg-green-50 rounded-lg">
+            <div className="text-3xl font-bold text-green-600">{stats.bots.verified}</div>
+            <div className="text-sm text-gray-600 mt-1">Verified Bots</div>
+            <div className="text-xs text-gray-500">DNS validated</div>
+          </div>
+          <div className="text-center p-4 bg-red-50 rounded-lg">
+            <div className="text-3xl font-bold text-red-600">{stats.bots.fake}</div>
+            <div className="text-sm text-gray-600 mt-1">Fake Bots</div>
+            <div className="text-xs text-gray-500">DNS validation failed</div>
+          </div>
+          <div className="text-center p-4 bg-blue-50 rounded-lg">
+            <div className="text-3xl font-bold text-blue-600">{stats.bots.types}</div>
+            <div className="text-sm text-gray-600 mt-1">Bot Types</div>
+            <div className="text-xs text-gray-500">Detected varieties</div>
+          </div>
+        </div>
+      </div>
+
+      {/* Quick Actions */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <QuickActionCard
+          title="Manage IPs"
+          description="View and manage IP lists"
+          link="/dashboard/traffic/ips"
+          icon="🔍"
+        />
+        <QuickActionCard
+          title="Auto Rules"
+          description="Configure automatic rules"
+          link="/dashboard/traffic/rules"
+          icon="⚙️"
+        />
+        <QuickActionCard
+          title="Analytics"
+          description="View detailed analytics"
+          link="/dashboard/traffic/analytics"
+          icon="📊"
+        />
+      </div>
+    </div>
+  );
+}
+
+function StatCard({ title, value, subtitle, color, icon }: {
+  title: string;
+  value: string;
+  subtitle: string;
+  color: string;
+  icon: string;
+}) {
+  const colorClasses = {
+    blue: 'bg-blue-50 border-blue-200',
+    green: 'bg-green-50 border-green-200',
+    purple: 'bg-purple-50 border-purple-200',
+    red: 'bg-red-50 border-red-200',
+  }[color];
+
+  return (
+    <div className={`${colorClasses} border-2 rounded-lg p-4`}>
+      <div className="flex items-center justify-between">
+        <div>
+          <div className="text-sm text-gray-600">{title}</div>
+          <div className="text-3xl font-bold mt-2">{value}</div>
+          <div className="text-xs text-gray-500 mt-1">{subtitle}</div>
+        </div>
+        <div className="text-4xl">{icon}</div>
+      </div>
+    </div>
+  );
+}
+
+function ListItem({ label, count, color, percentage }: {
+  label: string;
+  count: number;
+  color: string;
+  percentage: string;
+}) {
+  const colorClasses = {
+    green: 'bg-green-500',
+    yellow: 'bg-yellow-500',
+    red: 'bg-red-500',
+    gray: 'bg-gray-500',
+  }[color];
+
+  return (
+    <div className="flex items-center justify-between">
+      <div className="flex items-center gap-2">
+        <div className={`w-3 h-3 rounded-full ${colorClasses}`}></div>
+        <span className="font-medium">{label}</span>
+      </div>
+      <div className="flex items-center gap-4">
+        <span className="text-gray-600">{count.toLocaleString()}</span>
+        <span className="text-sm text-gray-500 w-12 text-right">{percentage}%</span>
+      </div>
+    </div>
+  );
+}
+
+function RiskItem({ level, count, avgScore }: {
+  level: string;
+  count: number;
+  avgScore: number;
+}) {
+  const colors = {
+    critical: { bg: 'bg-red-100', text: 'text-red-700', border: 'border-red-300' },
+    high: { bg: 'bg-orange-100', text: 'text-orange-700', border: 'border-orange-300' },
+    medium: { bg: 'bg-yellow-100', text: 'text-yellow-700', border: 'border-yellow-300' },
+    low: { bg: 'bg-green-100', text: 'text-green-700', border: 'border-green-300' },
+  }[level] || { bg: 'bg-gray-100', text: 'text-gray-700', border: 'border-gray-300' };
+
+  return (
+    <div className={`flex items-center justify-between p-3 rounded border ${colors.bg} ${colors.border}`}>
+      <div>
+        <div className={`font-semibold capitalize ${colors.text}`}>{level}</div>
+        <div className="text-xs text-gray-600">Avg score: {avgScore.toFixed(1)}</div>
+      </div>
+      <div className={`text-2xl font-bold ${colors.text}`}>{count}</div>
+    </div>
+  );
+}
+
+function QuickActionCard({ title, description, link, icon }: {
+  title: string;
+  description: string;
+  link: string;
+  icon: string;
+}) {
+  return (
+    <a
+      href={link}
+      className="block bg-white rounded-lg shadow p-6 hover:shadow-lg transition-shadow"
+    >
+      <div className="text-4xl mb-3">{icon}</div>
+      <h3 className="text-lg font-semibold">{title}</h3>
+      <p className="text-sm text-gray-600 mt-1">{description}</p>
+      <div className="mt-4 text-blue-600 text-sm font-medium">View →</div>
+    </a>
+  );
+}

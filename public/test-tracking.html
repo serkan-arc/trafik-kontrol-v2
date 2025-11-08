@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>newsalesozphyzenid2.shop - Test Page</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #333;
+            border-bottom: 2px solid #4CAF50;
+            padding-bottom: 10px;
+        }
+        .info {
+            background: #e8f5e9;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 20px 0;
+        }
+        button {
+            background: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 10px 5px;
+        }
+        button:hover {
+            background: #45a049;
+        }
+        .form-section {
+            margin-top: 30px;
+            padding: 20px;
+            background: #f9f9f9;
+            border-radius: 5px;
+        }
+        input {
+            width: 100%;
+            padding: 8px;
+            margin: 5px 0;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        #console {
+            background: #000;
+            color: #0f0;
+            padding: 10px;
+            border-radius: 5px;
+            font-family: monospace;
+            font-size: 12px;
+            max-height: 200px;
+            overflow-y: auto;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>newsalesozphyzenid2.shop - Traffic Tracking Test</h1>
+        
+        <div class="info">
+            <h3>📊 Tracking Status</h3>
+            <p>Domain: <strong>newsalesozphyzenid2.shop</strong></p>
+            <p>Page URL: <strong><span id="current-url"></span></strong></p>
+            <p>Visitor ID: <strong><span id="visitor-id"></span></strong></p>
+            <p>Session ID: <strong><span id="session-id"></span></strong></p>
+        </div>
+
+        <div>
+            <h3>🎯 Test Actions</h3>
+            <button onclick="testPageView()">Send Page View</button>
+            <button onclick="testCustomEvent()">Send Custom Event</button>
+            <button data-track="true">Tracked Button (Auto)</button>
+            <a href="#test" class="cta" style="display: inline-block; padding: 10px 20px; background: #2196F3; color: white; text-decoration: none; border-radius: 5px;">CTA Link (Auto Tracked)</a>
+        </div>
+
+        <div class="form-section">
+            <h3>📝 Test Form Submission</h3>
+            <form id="test-form">
+                <input type="text" name="name" placeholder="Name" required>
+                <input type="email" name="email" placeholder="Email" required>
+                <input type="tel" name="phone" placeholder="Phone">
+                <button type="submit">Submit Form</button>
+            </form>
+        </div>
+
+        <div id="console">
+            <div>Console output will appear here...</div>
+        </div>
+    </div>
+
+    <!-- Multi-Domain Tracking Script -->
+    <script src="/tracking/multi-domain-track.js" 
+            data-domain="newsalesozphyzenid2.shop" 
+            data-api-url="http://207.180.204.60:3001"></script>
+
+    <script>
+        // Display current info
+        document.getElementById('current-url').textContent = window.location.href;
+        document.getElementById('visitor-id').textContent = localStorage.getItem('tc_visitor_id') || 'Not set yet';
+        document.getElementById('session-id').textContent = sessionStorage.getItem('tc_session_id') || 'Not set yet';
+
+        // Console logger
+        function logToConsole(message, type = 'info') {
+            const consoleDiv = document.getElementById('console');
+            const timestamp = new Date().toLocaleTimeString();
+            const color = type === 'error' ? '#f44' : type === 'success' ? '#4f4' : '#0ff';
+            consoleDiv.innerHTML += `<div style="color: ${color}">[${timestamp}] ${message}</div>`;
+            consoleDiv.scrollTop = consoleDiv.scrollHeight;
+        }
+
+        // Override console.log for display
+        const originalLog = console.log;
+        console.log = function(...args) {
+            originalLog.apply(console, args);
+            logToConsole(args.join(' '), 'info');
+        };
+
+        // Test functions
+        function testPageView() {
+            if (window.trackEvent) {
+                window.trackEvent('pageview', { test: true });
+                logToConsole('Page view event sent!', 'success');
+            } else {
+                logToConsole('Tracking not initialized yet', 'error');
+            }
+        }
+
+        function testCustomEvent() {
+            if (window.trackEvent) {
+                window.trackEvent('custom', { 
+                    action: 'test_button_click',
+                    value: Math.random() 
+                });
+                logToConsole('Custom event sent!', 'success');
+            } else {
+                logToConsole('Tracking not initialized yet', 'error');
+            }
+        }
+
+        // Form submission handler
+        document.getElementById('test-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            logToConsole('Form submitted - tracking should fire automatically', 'success');
+            setTimeout(() => {
+                document.getElementById('test-form').reset();
+            }, 1000);
+        });
+
+        // Update IDs after tracking initializes
+        setTimeout(() => {
+            document.getElementById('visitor-id').textContent = localStorage.getItem('tc_visitor_id') || 'Not set';
+            document.getElementById('session-id').textContent = sessionStorage.getItem('tc_session_id') || 'Not set';
+        }, 1000);
+    </script>
+</body>
+</html>

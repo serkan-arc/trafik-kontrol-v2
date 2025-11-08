@@ -1,0 +1,486 @@
+'use client';
+
+import { useState, useEffect } from 'react';
+
+interface PM2Process {
+  name: string;
+  pm_id: number;
+  status: string;
+  cpu: number;
+  memory: number;
+  uptime: number;
+  restarts: number;
+}
+
+interface PortInfo {
+  port: number;
+  status: 'available' | 'in-use';
+  site_name?: string;
+  process_name?: string;
+}
+
+export default function PM2ProcessesPage() {
+  const [processes, setProcesses] = useState<PM2Process[]>([]);
+  const [ports, setPorts] = useState<PortInfo[]>([]);
+  const [sites, setSites] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [portRange, setPortRange] = useState({ start: 3000, end: 3100 });
+  const [showPortModal, setShowPortModal] = useState(false);
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  const fetchData = async () => {
+    setLoading(true);
+    await Promise.all([fetchProcesses(), fetchPorts(), fetchSites()]);
+    setLoading(false);
+  };
+
+  const fetchProcesses = async () => {
+    try {
+      const res = await fetch('/api/pm2/list');
+      const data = await res.json();
+      
+      if (data.success && Array.isArray(data.processes)) {
+        setProcesses(data.processes);
+      } else {
+        setProcesses([]);
+      }
+    } catch (error) {
+      console.error('Error fetching processes:', error);
+      setProcesses([]);
+    }
+  };
+
+  const fetchSites = async () => {
+    try {
+      const res = await fetch('/api/sites');
+      const data = await res.json();
+      
+      if (data.success && Array.isArray(data.data)) {
+        setSites(data.data);
+      } else {
+        setSites([]);
+      }
+    } catch (error) {
+      console.error('Error fetching sites:', error);
+      setSites([]);
+    }
+  };
+
+  const fetchPorts = async () => {
+    try {
+      const res = await fetch(`/api/ports/check?start=${portRange.start}&end=${portRange.end}`);
+      const data = await res.json();
+      
+      if (data.success && Array.isArray(data.ports)) {
+        setPorts(data.ports);
+      } else {
+        // Fallback: get ports from sites
+        const sitesRes = await fetch('/api/sites');
+        const sitesData = await sitesRes.json();
+        
+        if (sitesData.success && Array.isArray(sitesData.data)) {
+          const usedPorts: PortInfo[] = [];
+          
+          sitesData.data.forEach((site: any) => {
+            if (site.clean_port) {
+              usedPorts.push({
+                port: site.clean_port,
+                status: 'in-use',
+                site_name: site.name,
+                process_name: `${site.name}-clean`
+              });
+            }
+            if (site.gray_port) {
+              usedPorts.push({
+                port: site.gray_port,
+                status: 'in-use',
+                site_name: site.name,
+                process_name: `${site.name}-gray`
+              });
+            }
+            if (site.aggr_port) {
+              usedPorts.push({
+                port: site.aggr_port,
+                status: 'in-use',
+                site_name: site.name,
+                process_name: `${site.name}-aggressive`
+              });
+            }
+          });
+          
+          // Generate all ports in range
+          const allPorts: PortInfo[] = [];
+          for (let port = portRange.start; port <= portRange.end; port++) {
+            const usedPort = usedPorts.find(p => p.port === port);
+            allPorts.push(usedPort || { port, status: 'available' });
+          }
+          
+          setPorts(allPorts);
+        }
+      }
+    } catch (error) {
+      console.error('Error fetching ports:', error);
+      setPorts([]);
+    }
+  };
+
+  const formatUptime = (ms: number): string => {
+    const seconds = Math.floor(ms / 1000);
+    const minutes = Math.floor(seconds / 60);
+    const hours = Math.floor(minutes / 60);
+    const days = Math.floor(hours / 24);
+
+    if (days > 0) return `${days}d ${hours % 24}h`;
+    if (hours > 0) return `${hours}h ${minutes % 60}m`;
+    if (minutes > 0) return `${minutes}m ${seconds % 60}s`;
+    return `${seconds}s`;
+  };
+
+  const formatMemory = (bytes: number): string => {
+    return `${(bytes / 1024 / 1024).toFixed(1)} MB`;
+  };
+
+  const getStatusBadge = (status: string) => {
+    const statusClasses = {
+      online: 'bg-green-100 text-green-800',
+      stopping: 'bg-yellow-100 text-yellow-800',
+      stopped: 'bg-gray-100 text-gray-800',
+      errored: 'bg-red-100 text-red-800',
+      launching: 'bg-blue-100 text-blue-800',
+    };
+    
+    return (
+      <span className={`px-3 py-1 rounded-full text-xs font-medium ${statusClasses[status as keyof typeof statusClasses] || 'bg-gray-100 text-gray-800'}`}>
+        {status}
+      </span>
+    );
+  };
+
+  const handleProcessAction = async (processName: string, action: 'restart' | 'stop' | 'delete') => {
+    if (!confirm(`Are you sure you want to ${action} process "${processName}"?`)) {
+      return;
+    }
+
+    try {
+      const res = await fetch('/api/pm2/control', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ processName, action }),
+      });
+
+      const data = await res.json();
+
+      if (data.success) {
+        alert(`Process ${action}ed successfully!`);
+        fetchProcesses();
+      } else {
+        alert(`Failed to ${action} process: ${data.message}`);
+      }
+    } catch (error) {
+      console.error(`Error ${action}ing process:`, error);
+      alert(`Failed to ${action} process. Please try again.`);
+    }
+  };
+
+  const getNextAvailablePort = (): number | null => {
+    const usedPorts = new Set(ports.filter(p => p.status === 'in-use').map(p => p.port));
+    for (let port = portRange.start; port <= portRange.end; port++) {
+      if (!usedPorts.has(port)) {
+        return port;
+      }
+    }
+    return null;
+  };
+
+  const getSiteFromProcess = (processName: string): any | null => {
+    // Process name format: "sitename-clean", "sitename-gray", etc.
+    // Or just "traffic-control", "backend-api", etc.
+    
+    for (const site of sites) {
+      const siteName = site.name.toLowerCase().replace(/\s+/g, '-');
+      if (processName.toLowerCase().startsWith(siteName)) {
+        return site;
+      }
+    }
+    
+    return null;
+  };
+
+  return (
+    <div className="space-y-6">
+        {/* Header */}
+        <div className="flex items-center justify-between">
+          <div>
+            <h1 className="text-3xl font-bold text-gray-900">PM2 Processes & Ports</h1>
+            <p className="text-gray-600 mt-1">Monitor running processes and port availability</p>
+          </div>
+          <button
+            onClick={fetchData}
+            className="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors"
+          >
+            🔄 Refresh
+          </button>
+        </div>
+
+        {/* Stats Cards */}
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+          <div className="bg-white rounded-lg border border-gray-200 p-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm text-gray-600">Total Processes</p>
+                <p className="text-2xl font-bold text-gray-900 mt-1">{processes.length}</p>
+              </div>
+              <div className="text-3xl">⚙️</div>
+            </div>
+          </div>
+
+          <div className="bg-white rounded-lg border border-gray-200 p-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm text-gray-600">Online</p>
+                <p className="text-2xl font-bold text-green-600 mt-1">
+                  {processes.filter(p => p.status === 'online').length}
+                </p>
+              </div>
+              <div className="text-3xl">✅</div>
+            </div>
+          </div>
+
+          <div className="bg-white rounded-lg border border-gray-200 p-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm text-gray-600">Available Ports</p>
+                <p className="text-2xl font-bold text-blue-600 mt-1">
+                  {ports.filter(p => p.status === 'available').length}
+                </p>
+              </div>
+              <div className="text-3xl">🔌</div>
+            </div>
+          </div>
+
+          <div className="bg-white rounded-lg border border-gray-200 p-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm text-gray-600">Used Ports</p>
+                <p className="text-2xl font-bold text-orange-600 mt-1">
+                  {ports.filter(p => p.status === 'in-use').length}
+                </p>
+              </div>
+              <div className="text-3xl">🔒</div>
+            </div>
+          </div>
+        </div>
+
+        {/* Next Available Port */}
+        {getNextAvailablePort() && (
+          <div className="bg-green-50 border border-green-200 rounded-lg p-4">
+            <div className="flex items-center gap-3">
+              <div className="text-2xl">💡</div>
+              <div>
+                <h4 className="font-semibold text-green-900">Next Available Port</h4>
+                <p className="text-green-800 text-sm">
+                  Port <span className="font-mono font-bold">{getNextAvailablePort()}</span> is available for your next deployment
+                </p>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* PM2 Processes */}
+        <div className="bg-white rounded-lg border border-gray-200">
+          <div className="px-6 py-4 border-b border-gray-200">
+            <h2 className="text-xl font-semibold text-gray-900">Running Processes</h2>
+          </div>
+
+          {loading ? (
+            <div className="flex items-center justify-center py-12">
+              <div className="animate-spin rounded-full h-12 w-12 border-t-4 border-b-4 border-indigo-600"></div>
+            </div>
+          ) : processes.length === 0 ? (
+            <div className="text-center py-12">
+              <div className="text-6xl mb-4">⚙️</div>
+              <h3 className="text-lg font-medium text-gray-900 mb-2">No processes running</h3>
+              <p className="text-gray-600">Deploy a site to see PM2 processes here</p>
+            </div>
+          ) : (
+            <div className="divide-y divide-gray-200">
+              {processes.map((process) => (
+                <div key={process.pm_id} className="p-6 hover:bg-gray-50 transition-colors">
+                  <div className="flex items-center justify-between mb-4">
+                    <div>
+                      <div className="flex items-center gap-3 mb-2">
+                        <h3 className="text-lg font-semibold text-gray-900">{process.name}</h3>
+                        {getStatusBadge(process.status)}
+                      </div>
+                      <p className="text-sm text-gray-600">Process ID: {process.pm_id}</p>
+                    </div>
+
+                    <div className="flex gap-2">
+                      {(() => {
+                        const site = getSiteFromProcess(process.name);
+                        return site ? (
+                          <a
+                            href={`https://${site.domain}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="px-3 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 text-sm transition-colors"
+                          >
+                            🌐 Visit Site
+                          </a>
+                        ) : null;
+                      })()}
+                      <button
+                        onClick={() => handleProcessAction(process.name, 'restart')}
+                        className="px-3 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 text-sm transition-colors"
+                        disabled={process.status !== 'online'}
+                      >
+                        🔄 Restart
+                      </button>
+                      <button
+                        onClick={() => handleProcessAction(process.name, 'stop')}
+                        className="px-3 py-2 bg-yellow-600 text-white rounded-lg hover:bg-yellow-700 text-sm transition-colors"
+                        disabled={process.status === 'stopped'}
+                      >
+                        ⏸️ Stop
+                      </button>
+                      <button
+                        onClick={() => handleProcessAction(process.name, 'delete')}
+                        className="px-3 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 text-sm transition-colors"
+                      >
+                        🗑️ Delete
+                      </button>
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
+                    <div>
+                      <p className="text-xs text-gray-500 mb-1">CPU Usage</p>
+                      <p className="text-sm font-semibold text-gray-900">{process.cpu.toFixed(1)}%</p>
+                    </div>
+
+                    <div>
+                      <p className="text-xs text-gray-500 mb-1">Memory</p>
+                      <p className="text-sm font-semibold text-gray-900">{formatMemory(process.memory)}</p>
+                    </div>
+
+                    <div>
+                      <p className="text-xs text-gray-500 mb-1">Uptime</p>
+                      <p className="text-sm font-semibold text-gray-900">{formatUptime(process.uptime)}</p>
+                    </div>
+
+                    <div>
+                      <p className="text-xs text-gray-500 mb-1">Restarts</p>
+                      <p className="text-sm font-semibold text-gray-900">{process.restarts}</p>
+                    </div>
+
+                    <div>
+                      <p className="text-xs text-gray-500 mb-1">Status</p>
+                      <p className="text-sm font-semibold text-gray-900">{process.status}</p>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+
+        {/* Port Availability - Collapsible */}
+        <div className="bg-white rounded-lg border border-gray-200">
+          <div 
+            className="px-6 py-4 border-b border-gray-200 flex items-center justify-between cursor-pointer hover:bg-gray-50 transition-colors"
+            onClick={() => setShowPortModal(true)}
+          >
+            <div className="flex items-center gap-3">
+              <h2 className="text-xl font-semibold text-gray-900">Port Availability</h2>
+              <span className="text-sm text-gray-500">({portRange.start}-{portRange.end})</span>
+              <span className="text-sm bg-blue-100 text-blue-700 px-2 py-1 rounded">Click to check ports</span>
+            </div>
+            <div className="text-2xl">🔍</div>
+          </div>
+        </div>
+
+        {/* Port Check Modal */}
+        {showPortModal && (
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50" onClick={() => setShowPortModal(false)}>
+            <div className="bg-white rounded-lg shadow-2xl max-w-6xl w-full mx-4 max-h-[90vh] overflow-hidden" onClick={(e) => e.stopPropagation()}>
+              <div className="px-6 py-4 border-b border-gray-200 flex items-center justify-between bg-gradient-to-r from-indigo-600 to-purple-600">
+                <h2 className="text-xl font-semibold text-white">Port Availability Checker</h2>
+                <button
+                  onClick={() => setShowPortModal(false)}
+                  className="text-white hover:bg-white hover:bg-opacity-20 rounded-full p-2 transition-colors"
+                >
+                  ✕
+                </button>
+              </div>
+              
+              <div className="p-6">
+                <div className="flex gap-2 mb-6">
+                  <input
+                    type="number"
+                    value={portRange.start}
+                    onChange={(e) => setPortRange(prev => ({ ...prev, start: parseInt(e.target.value) }))}
+                    className="w-32 px-4 py-2 border-2 border-gray-300 rounded-lg text-sm font-mono focus:border-indigo-500 focus:outline-none"
+                    placeholder="Start Port"
+                  />
+                  <span className="text-gray-500 text-xl">→</span>
+                  <input
+                    type="number"
+                    value={portRange.end}
+                    onChange={(e) => setPortRange(prev => ({ ...prev, end: parseInt(e.target.value) }))}
+                    className="w-32 px-4 py-2 border-2 border-gray-300 rounded-lg text-sm font-mono focus:border-indigo-500 focus:outline-none"
+                    placeholder="End Port"
+                  />
+                  <button
+                    onClick={fetchPorts}
+                    className="px-6 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors font-semibold"
+                  >
+                    🔍 Check Ports
+                  </button>
+                </div>
+
+                <div className="max-h-[60vh] overflow-y-auto">
+                  <div className="grid grid-cols-8 md:grid-cols-12 lg:grid-cols-15 gap-2">
+              {ports.map((port) => (
+                <div
+                  key={port.port}
+                  className={`relative p-3 rounded-lg border-2 text-center transition-all cursor-pointer ${
+                    port.status === 'available'
+                      ? 'border-green-300 bg-green-50 hover:bg-green-100'
+                      : 'border-red-300 bg-red-50 hover:bg-red-100'
+                  }`}
+                  title={port.status === 'in-use' ? `${port.site_name} - ${port.process_name}` : 'Available'}
+                >
+                  <div className={`text-sm font-mono font-bold ${
+                    port.status === 'available' ? 'text-green-700' : 'text-red-700'
+                  }`}>
+                    {port.port}
+                  </div>
+                  <div className="text-xs mt-1">
+                    {port.status === 'available' ? '✅' : '🔒'}
+                  </div>
+                </div>
+              ))}
+                  </div>
+
+                  <div className="mt-6 flex items-center gap-6 text-sm bg-gray-50 p-4 rounded-lg">
+                    <div className="flex items-center gap-2">
+                      <div className="w-4 h-4 bg-green-50 border-2 border-green-300 rounded"></div>
+                      <span className="text-gray-700 font-semibold">Available: {ports.filter(p => p.status === 'available').length}</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <div className="w-4 h-4 bg-red-50 border-2 border-red-300 rounded"></div>
+                      <span className="text-gray-700 font-semibold">In Use: {ports.filter(p => p.status === 'in-use').length}</span>
+                    </div>
+                    <div className="ml-auto text-gray-600">Total Range: {portRange.end - portRange.start + 1} ports</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+    </div>
+  );
+}
