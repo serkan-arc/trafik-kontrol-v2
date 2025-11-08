@@ -61,6 +61,7 @@ export default function SSLCertificatesPage() {
         activeDomains.add('postgres.dtektracking.com');
         activeDomains.add('redis.dtektracking.com');
         activeDomains.add('dosya.dtektracking.com');
+        activeDomains.add('n8n.dtektracking.com');
         activeDomains.add('newsalesozphyzenid2.shop');
         activeDomains.add('www.newsalesozphyzenid2.shop');
         
