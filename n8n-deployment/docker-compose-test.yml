@@ -1,0 +1,27 @@
+version: '3.8'
+
+services:
+  n8n-test:
+    image: n8nio/n8n:latest
+    container_name: n8n-test
+    restart: always
+    ports:
+      - "5678:5678"
+    environment:
+      - DB_TYPE=postgresdb
+      - DB_POSTGRESDB_HOST=172.17.0.1
+      - DB_POSTGRESDB_PORT=5432
+      - DB_POSTGRESDB_DATABASE=n8n_db
+      - DB_POSTGRESDB_USER=n8n_user
+      - DB_POSTGRESDB_PASSWORD=N8nDtek2024!
+      - N8N_HOST=n8n.dtektracking.com
+      - N8N_PROTOCOL=https
+      - WEBHOOK_URL=https://n8n.dtektracking.com/
+      - N8N_ENCRYPTION_KEY=${N8N_ENCRYPTION_KEY}
+      - N8N_LOG_LEVEL=info
+    volumes:
+      - n8n_test_data:/home/node/.n8n
+
+volumes:
+  n8n_test_data:
+    driver: local
