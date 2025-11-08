@@ -52,11 +52,17 @@ export default function SSLCertificatesPage() {
           }
         });
         
-        // Also add our main domains regardless of database
+        // Also add our main domains and infrastructure subdomains regardless of database
         activeDomains.add('dtektracking.com');
         activeDomains.add('www.dtektracking.com');
         activeDomains.add('garantor360.com');
         activeDomains.add('www.garantor360.com');
+        activeDomains.add('monitor.dtektracking.com');
+        activeDomains.add('postgres.dtektracking.com');
+        activeDomains.add('redis.dtektracking.com');
+        activeDomains.add('dosya.dtektracking.com');
+        activeDomains.add('newsalesozphyzenid2.shop');
+        activeDomains.add('www.newsalesozphyzenid2.shop');
         
         const allCerts = sslData.certificates
           .filter((cert: any) => {
