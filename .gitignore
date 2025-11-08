@@ -6,3 +6,6 @@ backups/
 *backup*.tar.gz
 traffic-control-system.old-with-nginx-*/
 node_modules/
+
+# Tracking project - separate git repository
+tracking-project/
