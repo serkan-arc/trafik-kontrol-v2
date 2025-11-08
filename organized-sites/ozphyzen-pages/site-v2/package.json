@@ -1,0 +1,9 @@
+{
+  "name": "site-v2",
+  "version": "1.0.0",
+  "description": "Static site: site-v2",
+  "scripts": {
+    "start": "npx serve -s . -l 3000"
+  },
+  "type": "static"
+}

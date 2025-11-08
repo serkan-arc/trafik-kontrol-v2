@@ -1,0 +1,174 @@
+{
+  "version": "3.0.0",
+  "last_updated": "2024-11-08T21:04:00Z",
+  "backup_location": "/home/root/system_backup_20251108_210300.tar.gz",
+  "services": {
+    "traffic_control": {
+      "name": "Traffic Control System",
+      "type": "pm2",
+      "port": 3001,
+      "domain": "dtektracking.com",
+      "ssl": true,
+      "ssl_expires": "2026-02-03",
+      "status": "active",
+      "health_check": "http://localhost:3001",
+      "location": "/home/root/Trafic-manager-uretim-dosyasi",
+      "pm2_name": "traffic-control-prod"
+    },
+    "pgadmin": {
+      "name": "PostgreSQL Admin",
+      "type": "docker",
+      "container": "pgadmin",
+      "port": 5050,
+      "domain": "postgres.dtektracking.com",
+      "ssl": true,
+      "ssl_expires": "2026-02-06",
+      "status": "active",
+      "health_check": "http://localhost:5050"
+    },
+    "redis_commander": {
+      "name": "Redis Commander",
+      "type": "nodejs",
+      "port": 8081,
+      "domain": "redis.dtektracking.com",
+      "ssl": true,
+      "ssl_expires": "2026-02-06",
+      "status": "active",
+      "health_check": "http://localhost:8081",
+      "note": "Port 5540 duplicate removed on 2024-11-08"
+    },
+    "filebrowser": {
+      "name": "File Browser",
+      "type": "binary",
+      "port": 9001,
+      "domain": "dosya.dtektracking.com",
+      "ssl": true,
+      "ssl_expires": "2026-02-06",
+      "status": "active",
+      "health_check": "http://localhost:9001"
+    },
+    "monitor": {
+      "name": "System Monitor (Professional)",
+      "type": "python",
+      "script": "/home/root/webapp/professional_monitor.py",
+      "port": 61209,
+      "domain": "monitor.dtektracking.com",
+      "ssl": true,
+      "ssl_expires": "2026-02-06",
+      "status": "active",
+      "health_check": "http://localhost:61209",
+      "features": [
+        "System metrics (CPU, RAM, Disk, Network)",
+        "Notification monitoring",
+        "Health checks"
+      ]
+    }
+  },
+  "removed_services": {
+    "glances": {
+      "port": 61208,
+      "domain": "glances.dtektracking.com",
+      "removed_date": "2024-11-08",
+      "reason": "Not running, replaced by professional_monitor.py"
+    },
+    "panel": {
+      "domain": "panel.dtektracking.com",
+      "removed_date": "2024-11-08",
+      "reason": "Redundant - all services have dedicated domains"
+    },
+    "netdata": {
+      "port": 19999,
+      "removed_date": "2024-11-08",
+      "reason": "Not installed, never active"
+    },
+    "redis_commander_duplicate": {
+      "port": 5540,
+      "removed_date": "2024-11-08",
+      "reason": "Duplicate of port 8081 instance"
+    }
+  },
+  "ssl_certificates": {
+    "dtektracking.com": {
+      "provider": "letsencrypt",
+      "issued": "2025-11-05",
+      "expires": "2026-02-03",
+      "auto_renew": true,
+      "status": "valid"
+    },
+    "postgres.dtektracking.com": {
+      "provider": "letsencrypt",
+      "issued": "2025-11-08",
+      "expires": "2026-02-06",
+      "auto_renew": true,
+      "status": "valid"
+    },
+    "redis.dtektracking.com": {
+      "provider": "letsencrypt",
+      "issued": "2025-11-08",
+      "expires": "2026-02-06",
+      "auto_renew": true,
+      "status": "valid"
+    },
+    "dosya.dtektracking.com": {
+      "provider": "letsencrypt",
+      "issued": "2025-11-08",
+      "expires": "2026-02-06",
+      "auto_renew": true,
+      "status": "valid"
+    },
+    "monitor.dtektracking.com": {
+      "provider": "letsencrypt",
+      "issued": "2025-11-08",
+      "expires": "2026-02-06",
+      "auto_renew": true,
+      "status": "valid"
+    },
+    "newsalesozphyzenid2.shop": {
+      "provider": "letsencrypt",
+      "issued": "2025-11-05",
+      "expires": "2026-02-03",
+      "auto_renew": true,
+      "status": "valid"
+    }
+  },
+  "nginx_configs": {
+    "active": [
+      "dtektracking.com",
+      "postgres.dtektracking.com",
+      "redis.dtektracking.com",
+      "dosya.dtektracking.com",
+      "monitor.dtektracking.com",
+      "newsalesozphyzenid2.shop"
+    ],
+    "removed": [
+      "glances.dtektracking.com",
+      "panel.dtektracking.com"
+    ]
+  },
+  "database": {
+    "type": "postgresql",
+    "host": "postgres.dtekai.com",
+    "port": 5432,
+    "name": "dtektracking",
+    "tables": 31,
+    "notification_tables": [
+      "notification_channels",
+      "notification_rules",
+      "notification_history",
+      "notification_templates",
+      "notification_throttle"
+    ]
+  },
+  "cache": {
+    "type": "redis",
+    "host": "localhost",
+    "port": 6379,
+    "password_protected": true,
+    "status": "active"
+  },
+  "maintenance": {
+    "last_cleanup": "2024-11-08T21:04:00Z",
+    "last_backup": "2024-11-08T21:03:00Z",
+    "next_ssl_renewal": "2026-01-15"
+  }
+}

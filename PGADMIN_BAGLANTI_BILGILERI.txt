@@ -1,0 +1,99 @@
+=====================================
+PGADMIN POSTGRESQL BAĞLANTI BİLGİLERİ
+=====================================
+
+ADIM 1: pgAdmin'e Giriş
+------------------------
+URL: https://postgres.dtektracking.com
+Email: serkandogan@aiteldtek.com
+Şifre: Esvella2025136326
+
+
+ADIM 2: Server Ekleme
+----------------------
+1. Sol menüde boş alan varsa "Servers" üzerine sağ tıklayın
+2. Yoksa üst menüden: Object → Register → Server...
+
+
+ADIM 3: General Tab
+--------------------
+Name: DTek Tracking Database
+
+
+ADIM 4: Connection Tab (ÖNEMLİ - TAM KOPYALAYIN)
+--------------------------------------------------
+Host name/address: postgres.dtekai.com
+Port: 5432
+Maintenance database: dtektracking
+Username: postgres
+Password: T2hSWBtttsbYh7lZJFHNrfR2obeuXpnwNsM8wU0gaTHRFRL5c8a1QtYqT20DR58s
+Save password?: ✅ (Mutlaka işaretleyin)
+
+
+ADIM 5: Save
+------------
+Save butonuna tıklayın
+
+
+========================================
+BAĞLANTI BAŞARILI OLDUKTAN SONRA
+========================================
+
+Sol menüde görecekleriniz:
+- DTek Tracking Database
+  └── Databases
+      └── dtektracking
+          └── Schemas
+              └── public
+                  └── Tables (80+ tablo)
+                      - users
+                      - traffic_logs
+                      - ip_lists
+                      - sessions
+                      - campaigns
+                      - sites
+                      - leads
+                      - ve daha fazlası...
+
+
+========================================
+TEST SQL SORGULARI
+========================================
+
+1. Kullanıcıları göster:
+SELECT * FROM users LIMIT 5;
+
+2. Admin kullanıcı:
+SELECT * FROM users WHERE email = 'serkandogan@aiteldtek.com';
+
+3. Toplam trafik:
+SELECT COUNT(*) FROM traffic_logs;
+
+4. Tablo listesi:
+SELECT table_name FROM information_schema.tables 
+WHERE table_schema = 'public' 
+ORDER BY table_name;
+
+
+========================================
+SORUN GİDERME
+========================================
+
+HATA: "password authentication failed"
+ÇÖZÜM: Şifreyi tam olarak kopyalayın, başında/sonunda boşluk olmasın
+
+HATA: "could not translate host name"
+ÇÖZÜM: Host alanına "postgres.dtekai.com" yazın (localhost değil!)
+
+HATA: "database does not exist"
+ÇÖZÜM: Maintenance database alanına "dtektracking" yazın
+
+
+========================================
+KOPYALAMAK İÇİN - TEK SATIRDA
+========================================
+
+Host: postgres.dtekai.com
+Database: dtektracking
+Username: postgres
+Password: T2hSWBtttsbYh7lZJFHNrfR2obeuXpnwNsM8wU0gaTHRFRL5c8a1QtYqT20DR58s

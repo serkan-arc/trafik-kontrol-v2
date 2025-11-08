@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Güncellemeler Test Sayfası</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; background: #f5f5f5; }
+        .test-container { max-width: 800px; margin: 0 auto; background: white; padding: 30px; border-radius: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
+        .status { padding: 15px; margin: 10px 0; border-radius: 8px; }
+        .success { background: #d4edda; border: 1px solid #c3e6cb; color: #155724; }
+        .info { background: #d1ecf1; border: 1px solid #bee5eb; color: #0c5460; }
+        .test-image { text-align: center; margin: 20px 0; }
+        .test-image img { max-width: 200px; height: auto; border: 2px solid #ddd; border-radius: 10px; }
+        
+        /* Test countdown container */
+        .countdown-container {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: 3px solid #4f46e5;
+            border-radius: 20px;
+            padding: 25px;
+            text-align: center;
+            margin: 25px 0;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .countdown-container h4 {
+            color: white;
+            font-size: 18px;
+            margin-bottom: 15px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+        
+        .countdown-container .countdown-timer {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+        
+        .countdown-container .time-unit {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 12px;
+            padding: 15px 10px;
+            min-width: 70px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .countdown-container .time-unit .number {
+            display: block;
+            font-size: 28px;
+            font-weight: bold;
+            color: #4f46e5;
+            line-height: 1;
+        }
+        
+        .countdown-container .time-unit .label {
+            display: block;
+            font-size: 12px;
+            color: #6b7280;
+            font-weight: 600;
+            margin-top: 5px;
+            text-transform: uppercase;
+        }
+        
+        .countdown-container .countdown-message {
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 14px;
+            margin: 0;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+        }
+        
+        /* Floating Animation Test */
+        @keyframes float-gentle {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-15px); }
+        }
+        
+        .floating-animation {
+            animation: float-gentle 4s ease-in-out infinite;
+            transition: transform 0.3s ease;
+        }
+        
+        .floating-animation:hover {
+            animation-play-state: paused;
+            transform: translateY(-20px) scale(1.05);
+        }
+        
+        .code { background: #f8f9fa; border: 1px solid #e9ecef; padding: 10px; border-radius: 5px; font-family: monospace; margin: 10px 0; }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <h1>🧪 Hürriyet Health - Güncellemeler Test Sayfası</h1>
+        
+        <div class="status info">
+            <strong>Test Zamanı:</strong> <span id="test-time">--</span><br>
+            <strong>Test Durumu:</strong> Güncellemeler kontrol ediliyor...
+        </div>
+        
+        <h2>1. ⏰ Form Timer Testi</h2>
+        <div class="countdown-container" id="formCountdown">
+            <h4>⏰ KAMPANYA BİTİŞİNE KALAN SÜRE</h4>
+            <div class="countdown-timer">
+                <div class="time-unit">
+                    <span class="number" id="form-days">--</span>
+                    <span class="label">GÜN</span>
+                </div>
+                <div class="time-unit">
+                    <span class="number" id="form-hours">--</span>
+                    <span class="label">SAAT</span>
+                </div>
+                <div class="time-unit">
+                    <span class="number" id="form-minutes">--</span>
+                    <span class="label">DAKİKA</span>
+                </div>
+                <div class="time-unit">
+                    <span class="number" id="form-seconds">--</span>
+                    <span class="label">SANİYE</span>
+                </div>
+            </div>
+            <p class="countdown-message">Bu fırsatı kaçırmayın! İndirimli fiyat sadece kampanya süresince geçerlidir.</p>
+        </div>
+        
+        <div id="timer-status" class="status">Timer henüz başlamadı...</div>
+        
+        <h2>2. 🖼️ Temizlenmiş Görsel Testi</h2>
+        <div class="test-image">
+            <h3>Yeni Temizlenmiş Görsel:</h3>
+            <img src="images/ozphyzen-box-clean.png" alt="OZPHYZEN Temizlenmiş" class="floating-animation" id="clean-image">
+            <p>Bu görsel floating animasyonla hareket ediyor olmalı.</p>
+        </div>
+        
+        <div id="image-status" class="status">Görsel kontrol ediliyor...</div>
+        
+        <h2>3. 📅 Dinamik Tarih Testi</h2>
+        <div class="code">
+            <strong>Güncellenme Zamanı:</strong> <span id="update-timestamp">Test...</span><br>
+            <strong>Kampanya Bitiş:</strong> <span id="campaign-deadline-text">Test...</span>
+        </div>
+        
+        <div id="date-status" class="status">Tarihler kontrol ediliyor...</div>
+        
+        <h2>4. 🔧 Sunucuya Yükleme Talimatları</h2>
+        <div class="status info">
+            <p><strong>Sunucunuzda şu komutları çalıştırın:</strong></p>
+            <div class="code">
+cd /path/to/your/hurriyet-project<br>
+git pull origin main<br>
+# Eğer cache sorunu varsa:<br>
+systemctl restart apache2  # veya nginx restart
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Test zamanını göster
+        document.getElementById('test-time').textContent = new Date().toLocaleString('tr-TR');
+        
+        // Timer fonksiyonu (aynı kod)
+        function updateFormTimer(days, hours, minutes, seconds) {
+            const formDays = document.getElementById('form-days');
+            const formHours = document.getElementById('form-hours');
+            const formMinutes = document.getElementById('form-minutes');
+            const formSeconds = document.getElementById('form-seconds');
+            
+            if (formDays) formDays.textContent = String(days).padStart(2, '0');
+            if (formHours) formHours.textContent = String(hours).padStart(2, '0');
+            if (formMinutes) formMinutes.textContent = String(minutes).padStart(2, '0');
+            if (formSeconds) formSeconds.textContent = String(seconds).padStart(2, '0');
+        }
+        
+        // Countdown başlat
+        function initializeTestCountdown() {
+            const campaignDeadline = new Date();
+            campaignDeadline.setDate(campaignDeadline.getDate() + 2);
+            campaignDeadline.setHours(23, 59, 59, 999);
+            const deadline = campaignDeadline.getTime();
+            
+            function updateCountdown() {
+                const now = new Date().getTime();
+                const distance = deadline - now;
+                
+                if (distance < 0) {
+                    document.getElementById('timer-status').innerHTML = '<div class="status success">✅ Timer çalışıyor - Kampanya sona erdi mesajı gösterilecek</div>';
+                    return;
+                }
+                
+                const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+                
+                updateFormTimer(days, hours, minutes, seconds);
+                document.getElementById('timer-status').innerHTML = '<div class="status success">✅ Timer çalışıyor ve güncelliyor!</div>';
+            }
+            
+            setInterval(updateCountdown, 1000);
+            updateCountdown();
+        }
+        
+        // Dinamik tarih testi
+        function testDynamicDates() {
+            const todayShort = new Date().toLocaleString('tr-TR', { 
+                timeZone: 'Europe/Istanbul',
+                year: 'numeric',
+                month: '2-digit',
+                day: '2-digit'
+            });
+            
+            const campaignEnd = new Date();
+            campaignEnd.setDate(campaignEnd.getDate() + 2);
+            const campaignEndStr = campaignEnd.toLocaleString('tr-TR', { 
+                timeZone: 'Europe/Istanbul',
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+            });
+            
+            document.getElementById('update-timestamp').textContent = `Yayınlanma Tarihi: ${todayShort}`;
+            document.getElementById('campaign-deadline-text').textContent = `${campaignEndStr}!`;
+            document.getElementById('date-status').innerHTML = '<div class="status success">✅ Dinamik tarihler çalışıyor!</div>';
+        }
+        
+        // Görsel testi
+        function testImage() {
+            const img = document.getElementById('clean-image');
+            img.onload = function() {
+                document.getElementById('image-status').innerHTML = '<div class="status success">✅ Temizlenmiş görsel yüklendi ve animasyon çalışıyor!</div>';
+            };
+            img.onerror = function() {
+                document.getElementById('image-status').innerHTML = '<div class="status" style="background: #f8d7da; border: 1px solid #f5c6cb; color: #721c24;">❌ Görsel yüklenemedi - Sunucuda git pull gerekiyor!</div>';
+            };
+        }
+        
+        // Testleri başlat
+        window.addEventListener('DOMContentLoaded', function() {
+            initializeTestCountdown();
+            testDynamicDates();
+            testImage();
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,9 @@
+{
+  "name": "whatsapp-v2",
+  "version": "1.0.0",
+  "description": "Static site: whatsapp-v2",
+  "scripts": {
+    "start": "npx serve -s . -l 3000"
+  },
+  "type": "static"
+}

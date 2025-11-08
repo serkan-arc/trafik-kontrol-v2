@@ -1,0 +1,8 @@
+Bottle v0.12.25 server starting up (using WSGIRefServer())...
+Listening on http://0.0.0.0:61208/
+Hit Ctrl-C to quit.
+
+127.0.0.1 - - [08/Nov/2025 18:04:25] "HEAD / HTTP/1.1" 200 0
+127.0.0.1 - - [08/Nov/2025 18:04:25] "GET / HTTP/1.1" 200 466
+127.0.0.1 - - [08/Nov/2025 18:04:26] "GET / HTTP/1.1" 200 466
+Glances Web User Interface started on http://0.0.0.0:61208/

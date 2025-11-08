@@ -1,0 +1,58 @@
+{
+  "port": 8090,
+  "address": "0.0.0.0",
+  "database": "/home/root/webapp/filebrowser.db",
+  "root": "/",
+  "username": "admin",
+  "password": "",
+  "log": "stdout",
+  "auth": {
+    "method": "json"
+  },
+  "branding": {
+    "name": "DTek File Manager",
+    "disableExternal": false,
+    "theme": "light",
+    "color": "#4f46e5"
+  },
+  "commands": {
+    "after_save": [],
+    "before_save": []
+  },
+  "server": {
+    "root": "/",
+    "baseURL": "",
+    "socket": "",
+    "tlsKey": "",
+    "tlsCert": "",
+    "port": 8090,
+    "address": "0.0.0.0",
+    "log": "stdout",
+    "enableThumbnails": true,
+    "resizePreview": true
+  },
+  "settings": {
+    "signup": false,
+    "createUserDir": false,
+    "userHomeBasePath": "/home",
+    "defaults": {
+      "scope": ".",
+      "locale": "tr",
+      "viewMode": "list",
+      "sorting": {
+        "by": "name",
+        "asc": true
+      },
+      "permissions": {
+        "admin": true,
+        "execute": true,
+        "create": true,
+        "rename": true,
+        "modify": true,
+        "delete": true,
+        "share": true,
+        "download": true
+      }
+    }
+  }
+}

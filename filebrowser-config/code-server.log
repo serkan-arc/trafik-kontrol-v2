@@ -1,0 +1,91 @@
+[2025-10-27T00:01:53.985Z] info  code-server 4.105.1 811ec6c1d60add2eb92446161ca812828fdbaa7f
+[2025-10-27T00:01:53.987Z] info  Using user-data-dir /root/.local/share/code-server
+[2025-10-27T00:01:54.026Z] info  Using config file /root/.config/code-server/config.yaml
+[2025-10-27T00:01:54.026Z] info  HTTP server listening on http://0.0.0.0:8443/
+[2025-10-27T00:01:54.026Z] info    - Authentication is enabled
+[2025-10-27T00:01:54.026Z] info      - Using password from /root/.config/code-server/config.yaml
+[2025-10-27T00:01:54.026Z] info    - Not serving HTTPS
+[2025-10-27T00:01:54.026Z] info  Session server listening on /root/.local/share/code-server/code-server-ipc.sock
+[01:07:53] 
+
+
+
+
+[01:07:53] Extension host agent started.
+[01:07:54] Started initializing default profile extensions in extensions installation folder. file:///root/.local/share/code-server/extensions
+[01:07:54] Completed initializing default profile extensions in extensions installation folder. file:///root/.local/share/code-server/extensions
+File not found: /usr/lib/code-server/lib/vscode/node_modules/vsda/rust/web/vsda_bg.wasm
+File not found: /usr/lib/code-server/lib/vscode/node_modules/vsda/rust/web/vsda.js
+[01:14:09] [85.98.16.30][08903c97][ManagementConnection] New connection established.
+[01:14:11] [85.98.16.30][8e6cd62f][ExtensionHostConnection] New connection established.
+[01:14:11] [85.98.16.30][8e6cd62f][ExtensionHostConnection] <1790708> Launched Extension Host Process.
+(node:1789244) [DEP0060] DeprecationWarning: The `util._extend` API is deprecated. Please use Object.assign() instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+File not found: /usr/lib/code-server/lib/vscode/node_modules/vsda/rust/web/vsda_bg.wasm
+File not found: /usr/lib/code-server/lib/vscode/node_modules/vsda/rust/web/vsda.js
+[01:46:20] [85.98.16.30][114f7ebd][ManagementConnection] New connection established.
+[01:46:22] [85.98.16.30][d1431377][ExtensionHostConnection] New connection established.
+[01:46:22] [85.98.16.30][d1431377][ExtensionHostConnection] <1797469> Launched Extension Host Process.
+[01:47:08] RequestStore#acceptReply was called without receiving a matching request 25
+[01:47:08] RequestStore#acceptReply was called without receiving a matching request 26
+[01:47:08] RequestStore#acceptReply was called without receiving a matching request 27
+[01:47:08] RequestStore#acceptReply was called without receiving a matching request 28
+[01:47:08] RequestStore#acceptReply was called without receiving a matching request 29
+[01:47:08] RequestStore#acceptReply was called without receiving a matching request 30
+[01:47:08] RequestStore#acceptReply was called without receiving a matching request 31
+[01:47:08] RequestStore#acceptReply was called without receiving a matching request 32
+[01:47:08] RequestStore#acceptReply was called without receiving a matching request 33
+[01:47:08] RequestStore#acceptReply was called without receiving a matching request 34
+[01:47:08] RequestStore#acceptReply was called without receiving a matching request 35
+[01:47:08] RequestStore#acceptReply was called without receiving a matching request 36
+[01:52:45] [85.98.16.30][114f7ebd][ManagementConnection] The client has disconnected gracefully, so the connection will be disposed.
+[01:52:45] [85.98.16.30][d1431377][ExtensionHostConnection] <1797469> Extension Host Process exited with code: 0, signal: null.
+[01:52:50] [85.98.16.30][08903c97][ManagementConnection] The client has disconnected gracefully, so the connection will be disposed.
+[01:52:50] [85.98.16.30][8e6cd62f][ExtensionHostConnection] <1790708> Extension Host Process exited with code: 0, signal: null.
+Failed login attempt {"remoteAddress":"85.98.16.30","userAgent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36","timestamp":1761826241}
+Failed login attempt {"remoteAddress":"85.98.16.30","userAgent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36","timestamp":1761826249}
+File not found: /usr/lib/code-server/lib/vscode/node_modules/vsda/rust/web/vsda_bg.wasm
+File not found: /usr/lib/code-server/lib/vscode/node_modules/vsda/rust/web/vsda.js
+[13:12:13] [85.98.16.30][4403edd3][ManagementConnection] New connection established.
+[13:12:15] [85.98.16.30][204e7561][ExtensionHostConnection] New connection established.
+[13:12:15] [85.98.16.30][204e7561][ExtensionHostConnection] <1976862> Launched Extension Host Process.
+[14:29:22] [File Watcher (node.js)] Watcher shutdown because watched path got deleted
+[14:29:22] [File Watcher (node.js)] Watcher shutdown because watched path got deleted
+[14:29:23] [File Watcher (node.js)] Watcher shutdown because watched path got deleted
+[14:29:25] [File Watcher (node.js)] Watcher shutdown because watched path got deleted
+[14:33:28] [85.98.16.30][4403edd3][ManagementConnection] The client has disconnected gracefully, so the connection will be disposed.
+[14:33:28] [85.98.16.30][204e7561][ExtensionHostConnection] <1976862> Extension Host Process exited with code: 0, signal: null.
+File not found: /usr/lib/code-server/lib/vscode/node_modules/vsda/rust/web/vsda_bg.wasm
+File not found: /usr/lib/code-server/lib/vscode/node_modules/vsda/rust/web/vsda.js
+[14:41:59] [85.98.16.30][5da733f6][ManagementConnection] New connection established.
+[14:42:00] [85.98.16.30][366dcbb8][ExtensionHostConnection] New connection established.
+[14:42:00] [85.98.16.30][366dcbb8][ExtensionHostConnection] <1984354> Launched Extension Host Process.
+[14:42:09] [85.98.16.30][5da733f6][ManagementConnection] The client has disconnected gracefully, so the connection will be disposed.
+[14:42:09] [85.98.16.30][366dcbb8][ExtensionHostConnection] <1984354> Extension Host Process exited with code: 0, signal: null.
+File not found: /usr/lib/code-server/lib/vscode/node_modules/vsda/rust/web/vsda_bg.wasm
+File not found: /usr/lib/code-server/lib/vscode/node_modules/vsda/rust/web/vsda.js
+[14:42:10] [85.98.16.30][75b6ec5b][ManagementConnection] New connection established.
+[14:42:11] [85.98.16.30][676e8379][ExtensionHostConnection] New connection established.
+[14:42:11] [85.98.16.30][676e8379][ExtensionHostConnection] <1984924> Launched Extension Host Process.
+[14:43:27] [85.98.16.30][75b6ec5b][ManagementConnection] The client has disconnected gracefully, so the connection will be disposed.
+[14:43:27] [85.98.16.30][676e8379][ExtensionHostConnection] <1984924> Extension Host Process exited with code: 0, signal: null.
+File not found: /usr/lib/code-server/lib/vscode/node_modules/vsda/rust/web/vsda_bg.wasm
+File not found: /usr/lib/code-server/lib/vscode/node_modules/vsda/rust/web/vsda.js
+[15:21:55] [85.98.16.30][a6fa4b92][ManagementConnection] New connection established.
+[15:21:57] [85.98.16.30][b9e6234a][ExtensionHostConnection] New connection established.
+[15:21:57] [85.98.16.30][b9e6234a][ExtensionHostConnection] <1989167> Launched Extension Host Process.
+[15:43:41] [85.98.16.30][a6fa4b92][ManagementConnection] The client has disconnected gracefully, so the connection will be disposed.
+[15:43:41] [85.98.16.30][b9e6234a][ExtensionHostConnection] <1989167> Extension Host Process exited with code: 0, signal: null.
+File not found: /usr/lib/code-server/lib/vscode/node_modules/vsda/rust/web/vsda_bg.wasm
+File not found: /usr/lib/code-server/lib/vscode/node_modules/vsda/rust/web/vsda.js
+[16:16:43] [85.98.16.30][60e96ab2][ManagementConnection] New connection established.
+[16:16:44] [85.98.16.30][0418fe7e][ExtensionHostConnection] New connection established.
+[16:16:44] [85.98.16.30][0418fe7e][ExtensionHostConnection] <1996862> Launched Extension Host Process.
+[16:17:44] [85.98.16.30][60e96ab2][ManagementConnection] The client has disconnected gracefully, so the connection will be disposed.
+[16:17:44] [85.98.16.30][0418fe7e][ExtensionHostConnection] <1996862> Extension Host Process exited with code: 0, signal: null.
+File not found: /usr/lib/code-server/lib/vscode/node_modules/vsda/rust/web/vsda_bg.wasm
+File not found: /usr/lib/code-server/lib/vscode/node_modules/vsda/rust/web/vsda.js
+[16:21:13] [85.98.16.30][f935b194][ManagementConnection] New connection established.
+[16:21:14] [85.98.16.30][be77f69c][ExtensionHostConnection] New connection established.
+[16:21:14] [85.98.16.30][be77f69c][ExtensionHostConnection] <1998743> Launched Extension Host Process.
+[16:21:15] [85.98.16.30][f935b194][ManagementConnection] The client has disconnected gracefully, so the connection will be disposed.

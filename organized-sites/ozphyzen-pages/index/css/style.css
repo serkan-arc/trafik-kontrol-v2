@@ -1,0 +1,2283 @@
+/* Hürriyet Gazetesi - Resmi CSS Stil Dosyası */
+
+/* Reset ve Global Stiller */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html, body {
+    font-family: 'Roboto', Arial, sans-serif;
+    line-height: 1.6;
+    color: #333;
+    background-color: #f8f9fa;
+    width: 100%;
+    margin: 0 auto;
+    word-spacing: normal;
+    letter-spacing: normal;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+    width: 100%;
+}
+
+/* Hürriyet Header Stilleri */
+.main-header {
+    background: #fff;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+.header-top {
+    background: #e8e8e8;
+    padding: 5px 0;
+    font-size: 12px;
+}
+
+.header-top .container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.header-date {
+    color: #666;
+    font-weight: 500;
+}
+
+.header-social a {
+    color: #666;
+    margin-left: 15px;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.header-social a:hover {
+    color: #d41f2c;
+}
+
+.header-main {
+    padding: 10px 0;
+    border-bottom: 2px solid #d41f2c;
+}
+
+.header-main .container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+/* Hürriyet Logo */
+.logo-section {
+    flex: 0 0 auto;
+}
+
+.hurriyet-logo {
+    display: flex;
+    align-items: center;
+}
+
+.hurriyet-logo img {
+    height: 45px;
+    width: auto;
+    max-width: 240px;
+}
+
+/* Ana Navigasyon */
+.main-nav {
+    flex: 1;
+    margin: 0 30px;
+}
+
+.main-nav ul {
+    display: flex;
+    list-style: none;
+    justify-content: center;
+    gap: 0;
+}
+
+.main-nav li {
+    margin: 0;
+}
+
+.main-nav a {
+    display: block;
+    padding: 8px 15px;
+    color: #333;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 14px;
+    transition: all 0.3s ease;
+    border-bottom: 2px solid transparent;
+}
+
+.main-nav a:hover,
+.main-nav a.active {
+    color: #d41f2c;
+    border-bottom-color: #d41f2c;
+}
+
+/* Arama */
+.header-search {
+    flex: 0 0 auto;
+    display: flex;
+    align-items: center;
+}
+
+.header-search input {
+    padding: 8px 12px;
+    border: 2px solid #ddd;
+    border-radius: 4px 0 0 4px;
+    outline: none;
+    font-size: 14px;
+    width: 200px;
+}
+
+.header-search button {
+    padding: 10px 12px;
+    background: #d41f2c;
+    color: white;
+    border: none;
+    border-radius: 0 4px 4px 0;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+.header-search button:hover {
+    background: #b91c28;
+}
+
+/* Son Dakika Bar */
+.breaking-news {
+    background: linear-gradient(135deg, #d41f2c, #b91c28);
+    color: white;
+    padding: 6px 0;
+    overflow: hidden;
+}
+
+.breaking-news .container {
+    display: flex;
+    align-items: center;
+}
+
+.breaking-label {
+    background: #fff;
+    color: #d41f2c;
+    padding: 4px 12px;
+    font-weight: bold;
+    font-size: 12px;
+    border-radius: 3px;
+    margin-right: 15px;
+    flex: 0 0 auto;
+}
+
+.breaking-content {
+    flex: 1;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+/* Ana İçerik */
+.main-content {
+    padding: 20px 0;
+    min-height: calc(100vh - 200px);
+    width: 100%;
+}
+
+.main-content .container {
+    display: block;
+    max-width: 100%;
+    width: 100%;
+}
+
+/* Breadcrumb */
+.breadcrumb {
+    margin-bottom: 20px;
+    font-size: 14px;
+    color: #666;
+    width: 800px;
+    max-width: 90%;
+    margin: 0 auto 20px auto;
+}
+
+.breadcrumb a {
+    color: #d41f2c;
+    text-decoration: none;
+}
+
+.breadcrumb a:hover {
+    text-decoration: underline;
+}
+
+/* Haber Makalesi */
+.news-article {
+    background: white;
+    padding: 30px 20px;
+    width: 800px;
+    max-width: 90%;
+    margin: 0 auto;
+    display: block;
+}
+
+.article-category {
+    background: #d41f2c;
+    color: white;
+    padding: 6px 12px;
+    font-size: 12px;
+    font-weight: bold;
+    border-radius: 3px;
+    display: inline-block;
+    margin-bottom: 15px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.article-title {
+    font-size: 32px;
+    line-height: 1.2;
+    margin-bottom: 25px;
+    color: #000;
+    font-weight: 700;
+    font-family: 'Roboto', sans-serif;
+}
+
+.article-lead {
+    font-size: 20px;
+    line-height: 1.5;
+    color: #444;
+    margin-bottom: 25px;
+    font-style: italic;
+    padding: 20px;
+    background: #f8f9fa;
+    border-left: 5px solid #d41f2c;
+    border-radius: 5px;
+    font-weight: 500;
+    word-spacing: normal;
+    letter-spacing: normal;
+}
+
+.article-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 0;
+    border-top: 1px solid #eee;
+    border-bottom: 1px solid #eee;
+    margin-bottom: 30px;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+.meta-info {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.meta-info span {
+    font-size: 14px;
+    color: #666;
+}
+
+.social-share {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.social-share span {
+    font-size: 14px;
+    color: #666;
+    margin-right: 10px;
+}
+
+.share-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    color: white;
+    text-decoration: none;
+    transition: transform 0.3s ease;
+}
+
+.share-btn:hover {
+    transform: translateY(-2px);
+}
+
+.share-btn.facebook { background: #3b5998; }
+.share-btn.twitter { background: #1da1f2; }
+.share-btn.whatsapp { background: #25d366; }
+
+/* Doktor Hero Bölümü */
+.doctor-hero-section {
+    text-align: center;
+    margin: 25px 0 30px 0;
+}
+
+.doctor-hero-image {
+    width: 100%;
+    max-width: 500px;
+    height: auto;
+    margin: 0 auto;
+    display: block;
+}
+
+.doctor-hero-caption {
+    text-align: center;
+    font-size: 14px;
+    color: #666;
+    font-style: italic;
+    margin-top: 10px;
+    margin-bottom: 0;
+}
+
+/* Özgürlük Çalınması Bölümü */
+.freedom-stolen-section {
+    margin: 30px 0 40px 0;
+    text-align: center;
+}
+
+.freedom-stolen-image {
+    width: 100%;
+    max-width: 600px;
+    height: auto;
+    margin: 0 auto 20px auto;
+    display: block;
+}
+
+.freedom-stolen-caption {
+    font-size: 16px;
+    color: #666;
+    font-style: italic;
+    margin: 0;
+    text-align: center;
+    line-height: 1.5;
+}
+
+/* Vücut İhaneti Karşılaştırma Bölümü */
+.body-betrayal-section {
+    margin: 20px 0 25px 0;
+    text-align: center;
+}
+
+.body-betrayal-image {
+    width: 100%;
+    max-width: 500px;
+    height: auto;
+    margin: 0 auto 15px auto;
+    display: block;
+}
+
+.body-betrayal-caption {
+    font-size: 14px;
+    color: #666;
+    font-style: italic;
+    margin: 0;
+    text-align: center;
+    line-height: 1.4;
+}
+
+/* İlaç Zehirlenmesi Bölümü */
+.medicine-poisoning-section {
+    margin: 20px 0 25px 0;
+    text-align: center;
+}
+
+.medicine-poisoning-image {
+    width: 100%;
+    max-width: 550px;
+    height: auto;
+    margin: 0 auto 15px auto;
+    display: block;
+}
+
+.medicine-poisoning-caption {
+    font-size: 14px;
+    color: #666;
+    font-style: italic;
+    margin: 0;
+    text-align: center;
+    line-height: 1.4;
+}
+
+/* Ruhsal Çöküş ve Yalnızlık Bölümü */
+.mental-collapse-section {
+    margin: 20px 0 25px 0;
+    text-align: center;
+}
+
+.mental-collapse-image {
+    width: 100%;
+    max-width: 600px;
+    height: auto;
+    margin: 0 auto 15px auto;
+    display: block;
+}
+
+.mental-collapse-caption {
+    font-size: 14px;
+    color: #666;
+    font-style: italic;
+    margin: 0;
+    text-align: center;
+    line-height: 1.4;
+}
+
+/* Hastane Bakım Bölümü */
+.hospital-care-section {
+    margin: 20px 0 25px 0;
+    text-align: center;
+}
+
+.hospital-care-image {
+    width: 100%;
+    max-width: 650px;
+    height: auto;
+    margin: 0 auto 15px auto;
+    display: block;
+}
+
+.hospital-care-caption {
+    font-size: 14px;
+    color: #666;
+    font-style: italic;
+    margin: 0;
+    text-align: center;
+    line-height: 1.4;
+}
+
+/* X-Ray Karşılaştırma Bölümü */
+.xray-comparison-section {
+    margin: 25px 0 30px 0;
+    text-align: center;
+}
+
+.xray-comparison-image {
+    width: 100%;
+    max-width: 600px;
+    height: auto;
+    margin: 0 auto 15px auto;
+    display: block;
+}
+
+.xray-comparison-caption {
+    font-size: 14px;
+    color: #666;
+    font-style: italic;
+    margin: 0;
+    text-align: center;
+    line-height: 1.4;
+}
+
+/* Makale İçeriği */
+.article-body {
+    font-size: 17px;
+    line-height: 1.7;
+    color: #333;
+    max-width: 100%;
+}
+
+.article-intro {
+    margin-bottom: 30px;
+}
+
+.article-intro p {
+    font-size: 18px;
+    font-weight: 500;
+    margin-bottom: 20px;
+    padding: 15px 0;
+    color: #666;
+    font-style: italic;
+    word-spacing: normal;
+    letter-spacing: normal;
+}
+
+.article-body h2 {
+    font-size: 24px;
+    color: #000;
+    margin: 35px 0 20px 0;
+    font-weight: 700;
+    border-bottom: 2px solid #333;
+    padding-bottom: 8px;
+    font-family: 'Roboto', sans-serif;
+}
+
+.article-body p {
+    margin-bottom: 20px;
+    text-align: justify;
+    word-spacing: normal;
+    letter-spacing: normal;
+}
+
+.article-body strong {
+    color: #d41f2c;
+    font-weight: 600;
+}
+
+/* Alıntı Kutusu */
+.quote-box {
+    background: #f8f9fa;
+    color: #333;
+    padding: 20px;
+    margin: 25px 0;
+    border-left: 3px solid #d41f2c;
+}
+
+.quote-box p {
+    font-size: 20px;
+    line-height: 1.5;
+    margin-bottom: 15px;
+    font-style: italic;
+    font-weight: 500;
+    word-spacing: normal;
+    letter-spacing: normal;
+}
+
+.quote-box cite {
+    font-style: normal;
+    font-weight: bold;
+    font-size: 16px;
+    color: #d41f2c;
+}
+
+/* Aşama Konteyneri */
+.stage-container {
+    margin: 40px 0;
+}
+
+.stage-item {
+    background: #fafafa;
+    border-bottom: 1px solid #eee;
+    margin-bottom: 25px;
+    padding: 25px 20px;
+    position: relative;
+    text-align: center;
+}
+
+.stage-number {
+    display: none;
+}
+
+.stage-item h3 {
+    font-size: 20px;
+    color: #000;
+    margin: 25px 0 20px 0;
+    font-weight: 700;
+    text-align: center;
+}
+
+.stage-item p {
+    margin: 0 auto;
+    line-height: 1.6;
+    text-align: justify;
+    max-width: 700px;
+    word-spacing: normal;
+    letter-spacing: normal;
+}
+
+.stage-item ul.medical-list {
+    margin: 15px auto 0 auto;
+    max-width: 700px;
+    text-align: left;
+}
+
+.medical-list li {
+    margin-bottom: 12px;
+    padding-left: 10px;
+    border-left: 3px solid #d41f2c;
+    background: #f8f9fa;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+/* Yöntem Grid */
+.method-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 25px;
+    margin: 30px 0;
+}
+
+.method-item {
+    padding: 15px 0;
+    border-bottom: 1px solid #eee;
+    background: transparent;
+}
+
+.method-item h4 {
+    font-size: 18px;
+    margin-bottom: 15px;
+    color: #000;
+}
+
+.method-item p {
+    margin: 0;
+    font-size: 16px;
+    line-height: 1.5;
+    word-spacing: normal;
+    letter-spacing: normal;
+}
+
+/* Uzman Alıntısı */
+.expert-quote {
+    background: #f8f9fa;
+    padding: 20px;
+    margin: 25px 0;
+    border-left: 3px solid #333;
+}
+
+.quote-content p {
+    font-size: 18px;
+    font-style: italic;
+    color: #333;
+    margin-bottom: 15px;
+    font-weight: 500;
+    word-spacing: normal;
+    letter-spacing: normal;
+}
+
+.quote-content cite {
+    font-weight: bold;
+    color: #000;
+    font-style: normal;
+}
+
+/* Testimonial Grid */
+.testimonial-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
+    gap: 30px;
+    margin: 30px 0;
+}
+
+.testimonial {
+    background: #f9f9f9;
+    padding: 20px;
+    margin-bottom: 20px;
+    border-left: 3px solid #d41f2c;
+    position: relative;
+}
+
+.testimonial-photo {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    object-fit: cover;
+    float: left;
+    margin-right: 15px;
+    margin-bottom: 10px;
+}
+
+.testimonial-header {
+    overflow: hidden;
+    margin-bottom: 15px;
+}
+
+.testimonial-header h4 {
+    color: #000;
+    font-size: 18px;
+    margin-bottom: 15px;
+    font-weight: 600;
+}
+
+.testimonial p {
+    font-style: italic;
+    line-height: 1.6;
+    color: #444;
+    margin: 0;
+    word-spacing: normal;
+    letter-spacing: normal;
+}
+
+/* Hikaye Bölümü */
+.story-section {
+    margin: 40px 0;
+}
+
+.long-quote {
+    background: #f8f9fa;
+    padding: 35px;
+    border-radius: 8px;
+    margin: 25px 0;
+}
+
+.long-quote p {
+    font-size: 18px;
+    line-height: 1.7;
+    margin-bottom: 20px;
+    text-align: justify;
+    word-spacing: normal;
+    letter-spacing: normal;
+}
+
+/* Bilgi Kutuları */
+.info-box {
+    padding: 25px;
+    margin: 30px 0;
+    border-radius: 10px;
+    border: 2px solid #ddd;
+}
+
+.info-box.social-responsibility {
+    background: linear-gradient(135deg, #f0f8ff, #f5f9fc);
+    border: 2px dashed #87ceeb;
+    border-radius: 12px;
+}
+
+.info-box h3 {
+    font-size: 18px;
+    margin-bottom: 15px;
+    color: #000;
+}
+
+.info-box p {
+    margin: 0;
+    line-height: 1.6;
+    color: #333;
+    word-spacing: normal;
+    letter-spacing: normal;
+}
+
+/* Doktor Alıntı Konteyneri */
+.doctor-quote-container {
+    background: #f7f9fc;
+    border: 2px dashed #d1d9e6;
+    border-radius: 12px;
+    padding: 30px;
+    margin: 30px 0;
+    position: relative;
+}
+
+/* OZPHYZEN Ürün Hero Bölümü */
+.product-hero-section {
+    text-align: center;
+    margin: 30px 0;
+}
+
+.product-hero-image {
+    max-width: 300px;
+    height: auto;
+    margin: 0 auto;
+    display: block;
+    background: white;
+    padding: 15px;
+    border-radius: 8px;
+}
+
+
+
+/* Ağrı Görselleri Bölümü */
+.pain-images-section {
+    margin: 30px 0;
+    text-align: center;
+}
+
+.pain-images-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.pain-image-item {
+    background: #f8f9fa;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    transition: transform 0.3s ease;
+}
+
+.pain-image-item:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+}
+
+.pain-image {
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+    display: block;
+}
+
+.doctor-quote-container p {
+    font-size: 18px;
+    line-height: 1.6;
+    margin-bottom: 15px;
+    font-style: italic;
+    color: #2c3e50;
+    text-align: justify;
+    word-spacing: normal;
+    letter-spacing: normal;
+}
+
+.doctor-quote-container cite {
+    font-weight: bold;
+    color: #d41f2c;
+    font-style: normal;
+    font-size: 16px;
+    display: block;
+    text-align: right;
+    margin-top: 15px;
+}
+
+.doctor-quote-container cite::before {
+    content: "— ";
+    color: #666;
+}
+
+/* İçerik Bileşenleri Grid */
+.ingredient-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 25px;
+    margin: 25px 0;
+}
+
+.ingredient-item {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    border: 1px solid #ddd;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+    transition: transform 0.3s ease;
+}
+
+.ingredient-item:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(0,0,0,0.12);
+}
+
+.ingredient-item h4 {
+    color: #000;
+    font-size: 16px;
+    margin-bottom: 10px;
+}
+
+.ingredient-item p {
+    font-size: 14px;
+    line-height: 1.5;
+    margin: 0;
+    color: #555;
+    word-spacing: normal;
+    letter-spacing: normal;
+}
+
+/* Uyarı Kutusu */
+.warning-box {
+    background: linear-gradient(135deg, #fff3cd, #ffeaa7);
+    border: 2px solid #ffc107;
+    padding: 25px;
+    border-radius: 10px;
+    margin: 25px 0;
+}
+
+.warning-box p {
+    margin: 0;
+    font-weight: 500;
+    color: #856404;
+    word-spacing: normal;
+    letter-spacing: normal;
+}
+
+/* Kullanım Kılavuzu */
+.usage-guide {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 25px;
+    margin: 30px 0;
+}
+
+.usage-item {
+    background: transparent;
+    padding: 15px 0;
+    border-bottom: 1px solid #eee;
+}
+
+.usage-item.advanced {
+    border-bottom: 1px solid #eee;
+}
+
+.usage-item h4 {
+    color: #000;
+    margin-bottom: 10px;
+    font-size: 16px;
+}
+
+.usage-item.advanced h4 {
+    color: #000;
+}
+
+.usage-item p {
+    margin: 0;
+    line-height: 1.6;
+    word-spacing: normal;
+    letter-spacing: normal;
+}
+
+/* Hatırlatıcı Kutusu */
+.reminder-box {
+    background: linear-gradient(135deg, #e1f5fe, #b3e5fc);
+    border: 2px solid #03a9f4;
+    padding: 20px;
+    border-radius: 10px;
+    margin: 25px 0;
+    text-align: center;
+}
+
+.reminder-box p {
+    margin: 0;
+    font-weight: 500;
+    color: #0277bd;
+    word-spacing: normal;
+    letter-spacing: normal;
+}
+
+/* Bilimsel Sonuçlar */
+.scientific-results {
+    background: #f8f9fa;
+    padding: 30px;
+    border-radius: 10px;
+    margin: 40px 0;
+    border: 2px solid #6c757d;
+}
+
+.results-table {
+    margin: 25px 0;
+}
+
+.results-table table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+
+.results-table th {
+    background: linear-gradient(135deg, #d41f2c, #b91c28);
+    color: white;
+    padding: 15px;
+    text-align: left;
+    font-weight: 600;
+}
+
+.results-table td {
+    padding: 15px;
+    border-bottom: 1px solid #eee;
+}
+
+.results-table tr:last-child td {
+    border-bottom: none;
+}
+
+.success-rate {
+    font-weight: bold;
+    color: #2e7d32;
+    font-size: 18px;
+}
+
+/* Kampanya Bölümü */
+.campaign-section {
+    background: #f8f9fa;
+    padding: 25px;
+    margin: 25px 0;
+    border-top: 3px solid #d41f2c;
+}
+
+/* Kampanya Ürün Görseli */
+.campaign-product-image {
+    text-align: center;
+    margin-bottom: 20px;
+    margin-top: -10px;
+}
+
+.campaign-product-box {
+    max-width: 200px;
+    height: auto;
+    margin: 0 auto;
+    display: block;
+    filter: drop-shadow(0 5px 15px rgba(0,0,0,0.2));
+    transform: rotate(-5deg);
+    transition: transform 0.3s ease;
+}
+
+.campaign-product-box:hover {
+    transform: rotate(0deg) scale(1.05);
+}
+
+.campaign-alert {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.alert-header h3 {
+    color: #d41f2c;
+    font-size: 28px;
+    margin-bottom: 15px;
+    font-weight: 700;
+}
+
+.alert-header p {
+    font-size: 20px;
+    margin: 0;
+    font-weight: 500;
+}
+
+.countdown-info {
+    margin: 25px 0;
+}
+
+/* Şık Son Tarih Konteyneri */
+.deadline-container {
+    background: linear-gradient(135deg, #fef7e7, #fff8f1);
+    border: 3px dashed #f39c12;
+    border-radius: 15px;
+    padding: 25px;
+    margin: 25px 0;
+    text-align: center;
+    position: relative;
+    box-shadow: 0 4px 15px rgba(243, 156, 18, 0.15);
+}
+
+
+
+.deadline-container h4 {
+    color: #d68910;
+    font-size: 20px;
+    margin: 0;
+    font-weight: 600;
+}
+
+.highlight-date {
+    background: linear-gradient(135deg, #e74c3c, #c0392b);
+    color: white;
+    padding: 8px 15px;
+    border-radius: 25px;
+    font-weight: bold;
+    display: inline-block;
+    margin-left: 5px;
+    box-shadow: 0 3px 10px rgba(231, 76, 60, 0.3);
+    animation: pulse-glow 2s infinite;
+}
+
+@keyframes pulse-glow {
+    0%, 100% {
+        transform: scale(1);
+        box-shadow: 0 3px 10px rgba(231, 76, 60, 0.3);
+    }
+    50% {
+        transform: scale(1.05);
+        box-shadow: 0 5px 20px rgba(231, 76, 60, 0.5);
+    }
+}
+
+.decision-moment {
+    margin: 30px 0;
+    text-align: center;
+}
+
+.decision-moment h3 {
+    color: #d41f2c;
+    font-size: 24px;
+    margin-bottom: 15px;
+}
+
+.urgency-warning {
+    background: #fff3cd;
+    border: 2px solid #ffc107;
+    padding: 15px;
+    border-radius: 8px;
+    margin: 20px 0;
+}
+
+.urgency-warning p {
+    margin: 0;
+    font-weight: bold;
+    color: #856404;
+}
+
+.order-process {
+    background: white;
+    padding: 25px;
+    border-radius: 10px;
+    margin: 25px 0;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+
+/* Acil Güncelleme Konteyneri */
+.urgent-update-container {
+    background: linear-gradient(135deg, #fff8e1, #fff3c4, #ffecb3);
+    border: 2px dashed #ffab00;
+    border-radius: 12px;
+    padding: 25px;
+    margin: 30px 0;
+    text-align: center;
+    position: relative;
+}
+
+.urgent-update-container h4 {
+    color: #e65100;
+    margin-bottom: 15px;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.urgent-update-container p {
+    color: #bf360c;
+    font-size: 16px;
+    line-height: 1.5;
+    margin: 0;
+    word-spacing: normal;
+    letter-spacing: normal;
+}
+
+.urgent-update-container strong {
+    color: #e65100;
+    font-weight: bold;
+}
+
+/* Sipariş Formu */
+.order-form-section {
+    background: #fff;
+    border: 2px solid #e9ecef;
+    border-radius: 12px;
+    padding: 30px 20px;
+    margin: 40px auto;
+    max-width: 600px;
+    text-align: center;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+}
+
+/* Stok Bilgisi - Inline (Yeşil kutu içinde) */
+.stock-counter-inline {
+    margin-top: 10px;
+    padding-top: 8px;
+    border-top: 1px solid rgba(40, 167, 69, 0.3);
+    font-size: 14px;
+    color: #155724;
+    font-weight: 600;
+}
+
+.stock-counter-inline .stock-number {
+    color: #dc3545;
+    font-size: 16px;
+    font-weight: bold;
+    background: rgba(220, 53, 69, 0.15);
+    padding: 2px 6px;
+    border-radius: 4px;
+    animation: stock-pulse 2s infinite;
+}
+
+@keyframes stock-pulse {
+    0%, 100% {
+        color: #dc3545;
+        transform: scale(1);
+    }
+    50% {
+        color: #c82333;
+        transform: scale(1.05);
+    }
+}
+
+.stock-counter-inline small {
+    font-size: 12px;
+    color: #6c757d;
+    font-weight: normal;
+    margin-left: 5px;
+}
+
+.form-container h3 {
+    color: #2c3e50;
+    font-size: 24px;
+    margin-bottom: 15px;
+    font-weight: 600;
+}
+
+.form-container p {
+    color: #6c757d;
+    margin-bottom: 30px;
+    font-size: 16px;
+    text-align: center;
+    word-spacing: normal;
+    letter-spacing: normal;
+}
+
+.price-info {
+    text-align: center;
+    margin: 15px auto 20px auto;
+    padding: 12px 15px;
+    max-width: 400px;
+    background: linear-gradient(135deg, #e8f5e8, #f0f8f0, #f5fdf5);
+    border: 3px dashed #28a745;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(40, 167, 69, 0.2);
+    animation: campaign-pulse 2s infinite;
+}
+
+@keyframes campaign-pulse {
+    0%, 100% {
+        transform: scale(1);
+        box-shadow: 0 4px 15px rgba(40, 167, 69, 0.2);
+    }
+    50% {
+        transform: scale(1.02);
+        box-shadow: 0 6px 20px rgba(40, 167, 69, 0.4);
+    }
+}
+
+.price-comparison {
+    margin-bottom: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 12px;
+}
+
+.old-price {
+    font-size: 20px;
+    color: #999;
+    text-decoration: line-through;
+    font-weight: 500;
+    position: relative;
+}
+
+.discount-badge {
+    background: linear-gradient(135deg, #e74c3c, #c0392b);
+    color: white;
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    animation: bounce 1.5s infinite;
+}
+
+@keyframes bounce {
+    0%, 20%, 50%, 80%, 100% {
+        transform: translateY(0);
+    }
+    40% {
+        transform: translateY(-5px);
+    }
+    60% {
+        transform: translateY(-3px);
+    }
+}
+
+.current-price {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.price-amount {
+    font-size: 32px;
+    font-weight: bold;
+    color: #28a745;
+    margin-bottom: 5px;
+    text-shadow: 2px 2px 4px rgba(40, 167, 69, 0.3);
+    animation: price-glow 1.8s infinite;
+}
+
+@keyframes price-glow {
+    0%, 100% {
+        color: #28a745;
+        text-shadow: 2px 2px 4px rgba(40, 167, 69, 0.3);
+    }
+    50% {
+        color: #218838;
+        text-shadow: 2px 2px 8px rgba(33, 136, 56, 0.6);
+    }
+}
+
+.price-note {
+    font-size: 14px;
+    color: #155724;
+    font-weight: bold;
+    margin-bottom: 4px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.urgency-text {
+    font-size: 18px !important;
+    color: #d41f2c !important;
+    font-weight: bold !important;
+    background: rgba(212, 31, 44, 0.15) !important;
+    padding: 6px 12px !important;
+    border-radius: 8px;
+    animation: urgent-blink 1.2s infinite;
+    text-transform: uppercase;
+    display: block !important;
+    margin-top: 8px !important;
+}
+
+@keyframes urgent-blink {
+    0%, 50% {
+        opacity: 1;
+    }
+    25%, 75% {
+        opacity: 0.7;
+    }
+}
+
+.order-form {
+    max-width: 500px;
+    margin: 0 auto;
+}
+
+.form-row {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.form-group {
+    margin-bottom: 20px;
+    text-align: left;
+}
+
+.form-group.half-width {
+    flex: 1;
+    margin-bottom: 0;
+}
+
+.form-group label {
+    display: block;
+    color: #495057;
+    font-weight: 500;
+    margin-bottom: 8px;
+    text-align: left;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 15px 18px;
+    border: 2px solid #e9ecef;
+    border-radius: 10px;
+    font-size: 16px;
+    outline: none;
+    transition: all 0.3s ease;
+    background: #f8f9fa;
+}
+
+.form-group input:focus {
+    border-color: #d41f2c;
+    background: #fff;
+    box-shadow: 0 0 0 3px rgba(212, 31, 44, 0.1);
+}
+
+.order-button {
+    width: 100%;
+    background: linear-gradient(135deg, #d41f2c, #b91c28);
+    color: white;
+    border: none;
+    padding: 18px 30px;
+    border-radius: 10px;
+    font-size: 18px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    box-shadow: 0 4px 15px rgba(212, 31, 44, 0.3);
+}
+
+.order-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(212, 31, 44, 0.4);
+    background: linear-gradient(135deg, #b91c28, #a01b26);
+}
+
+/* Sidebar */
+.sidebar {
+    display: none;
+}
+
+.sidebar-section {
+    margin-bottom: 30px;
+}
+
+.sidebar-section:last-child {
+    margin-bottom: 0;
+}
+
+.sidebar-section h3 {
+    font-size: 18px;
+    color: #d41f2c;
+    margin-bottom: 15px;
+    border-bottom: 2px solid #d41f2c;
+    padding-bottom: 8px;
+}
+
+.related-news,
+.featured-news {
+    list-style: none;
+}
+
+.news-item {
+    margin-bottom: 15px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #eee;
+}
+
+.news-item:last-child {
+    margin-bottom: 0;
+    padding-bottom: 0;
+    border-bottom: none;
+}
+
+.news-item h4 {
+    margin-bottom: 5px;
+}
+
+.news-item a {
+    color: #333;
+    text-decoration: none;
+    font-size: 14px;
+    line-height: 1.4;
+    transition: color 0.3s ease;
+}
+
+.news-item a:hover {
+    color: #d41f2c;
+}
+
+.news-date {
+    font-size: 12px;
+    color: #666;
+}
+
+
+
+/* Responsive Tasarım */
+@media (max-width: 1024px) {
+    .news-article {
+        width: 90%;
+        max-width: 700px;
+    }
+    
+
+}
+
+@media (max-width: 900px) {
+    .news-article {
+        width: 95%;
+        max-width: 600px;
+        padding: 30px;
+    }
+}
+
+@media (max-width: 768px) {
+    .header-main .container {
+        justify-content: center;
+    }
+    
+    .main-nav {
+        display: none;
+    }
+    
+    .header-search {
+        display: none;
+    }
+    
+    .article-title {
+        font-size: 28px;
+    }
+    
+    .article-lead {
+        font-size: 18px;
+    }
+    
+    .article-body {
+        font-size: 16px;
+    }
+    
+    .testimonial-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .testimonial-photo {
+        width: 50px;
+        height: 50px;
+        margin-right: 10px;
+        margin-bottom: 8px;
+    }
+    
+    .testimonial-header h4 {
+        font-size: 16px;
+        margin-bottom: 10px;
+    }
+    
+    .ingredient-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .pain-images-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 15px;
+    }
+    
+    .pain-image {
+        height: 140px;
+    }
+    
+    .product-hero-image {
+        max-width: 250px;
+    }
+    
+    .method-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .usage-guide {
+        grid-template-columns: 1fr;
+    }
+    
+
+    
+    .container {
+        padding: 0 15px;
+    }
+}
+
+@media (max-width: 480px) {
+    /* Mobil yan boşluklar - 2px */
+    .container {
+        padding: 0 2px;
+    }
+    
+    /* Stok bilgisi mobil - inline */
+    .stock-counter-inline {
+        font-size: 13px;
+    }
+    
+    .stock-counter-inline .stock-number {
+        font-size: 14px;
+    }
+    
+    .stock-counter-inline small {
+        font-size: 11px;
+        display: block;
+        margin-left: 0;
+        margin-top: 2px;
+    }
+    
+    /* 480px altında da dikey form */
+    .form-row {
+        flex-direction: column;
+        gap: 0;
+    }
+    
+    .form-group.half-width {
+        margin-bottom: 15px;
+    }
+    
+    /* Ağrı görselleri mobil */
+    .pain-images-grid {
+        grid-template-columns: 1fr;
+        gap: 12px;
+        margin: 0 5px;
+    }
+    
+    .pain-image {
+        height: 160px;
+    }
+    
+    .pain-images-section {
+        margin: 20px 0;
+    }
+    
+    .product-hero-section {
+        margin: 20px 0;
+    }
+    
+    .product-hero-image {
+        max-width: 200px;
+    }
+    
+    /* Header'ı daha da küçült */
+    .main-header {
+        position: relative; /* Sticky'yi kaldır */
+    }
+    
+    .header-top {
+        padding: 3px 0;
+        font-size: 11px;
+    }
+    
+    .header-main {
+        padding: 8px 0;
+        border-bottom: 1px solid #d41f2c;
+    }
+    
+    .header-main .container {
+        justify-content: flex-start;
+        align-items: center;
+    }
+    
+    .hurriyet-logo img {
+        height: 45px;
+        max-width: 220px;
+    }
+    
+    .main-nav {
+        display: none;
+    }
+    
+    .breaking-news {
+        padding: 4px 0;
+        font-size: 12px;
+    }
+    
+    .breaking-label {
+        font-size: 10px;
+        padding: 3px 8px;
+    }
+    
+    .article-title {
+        font-size: 24px;
+    }
+    
+    .article-lead {
+        font-size: 16px;
+    }
+    
+    .news-article {
+        padding: 15px 8px;
+        width: calc(100% - 4px);
+        max-width: 100%;
+        margin: 0 2px;
+    }
+    
+    .doctor-hero-section {
+        margin: 20px 0 25px 0;
+    }
+    
+    .doctor-hero-image {
+        max-width: 100%;
+        margin: 0 auto;
+    }
+    
+    .doctor-hero-caption {
+        font-size: 13px;
+        margin-top: 8px;
+        margin-bottom: 0;
+    }
+    
+    .freedom-stolen-section {
+        margin: 20px 0 30px 0;
+    }
+    
+    .freedom-stolen-image {
+        max-width: 100%;
+        margin-bottom: 15px;
+    }
+    
+    .freedom-stolen-caption {
+        font-size: 14px;
+        line-height: 1.4;
+    }
+    
+    .body-betrayal-section {
+        margin: 15px 0 20px 0;
+    }
+    
+    .body-betrayal-image {
+        max-width: 100%;
+        margin-bottom: 10px;
+    }
+    
+    .body-betrayal-caption {
+        font-size: 13px;
+        line-height: 1.3;
+    }
+    
+    .medicine-poisoning-section {
+        margin: 15px 0 20px 0;
+    }
+    
+    .medicine-poisoning-image {
+        max-width: 100%;
+        margin-bottom: 10px;
+    }
+    
+    .medicine-poisoning-caption {
+        font-size: 13px;
+        line-height: 1.3;
+    }
+    
+    .mental-collapse-section {
+        margin: 15px 0 20px 0;
+    }
+    
+    .mental-collapse-image {
+        max-width: 100%;
+        margin-bottom: 10px;
+    }
+    
+    .mental-collapse-caption {
+        font-size: 13px;
+        line-height: 1.3;
+    }
+    
+    .hospital-care-section {
+        margin: 15px 0 20px 0;
+    }
+    
+    .hospital-care-image {
+        max-width: 100%;
+        margin-bottom: 10px;
+    }
+    
+    .hospital-care-caption {
+        font-size: 13px;
+        line-height: 1.3;
+    }
+    
+    .xray-comparison-section {
+        margin: 20px 0 25px 0;
+    }
+    
+    .xray-comparison-image {
+        max-width: 100%;
+        margin-bottom: 10px;
+    }
+    
+    .xray-comparison-caption {
+        font-size: 13px;
+        line-height: 1.3;
+    }
+    
+    .stage-item {
+        padding: 20px 15px;
+        text-align: center;
+    }
+    
+    .stage-item h3 {
+        margin: 20px 0 15px 0;
+        font-size: 18px;
+        text-align: center;
+    }
+    
+    .stage-item p {
+        margin: 0 auto;
+        max-width: 100%;
+        text-align: left;
+        word-spacing: normal;
+        letter-spacing: normal;
+        hyphens: none;
+    }
+    
+    .stage-item ul.medical-list {
+        margin: 15px auto 0 auto;
+        max-width: 100%;
+    }
+    
+    .order-form-section {
+        padding: 25px 15px;
+        margin: 30px 5px;
+        max-width: calc(100% - 10px);
+    }
+    
+    .form-group input {
+        padding: 12px 15px;
+    }
+    
+    /* Mobilde form-row'u dikey yap */
+    .form-row {
+        flex-direction: column;
+        gap: 0;
+    }
+    
+    .form-group.half-width {
+        margin-bottom: 20px;
+    }
+    
+    .order-button {
+        padding: 15px 25px;
+        font-size: 16px;
+    }
+    
+    .price-info {
+        margin: 10px auto 15px auto;
+        padding: 10px 12px;
+        max-width: 350px;
+    }
+    
+    .old-price {
+        font-size: 18px;
+    }
+    
+    .discount-badge {
+        font-size: 11px;
+        padding: 4px 10px;
+    }
+    
+    .price-amount {
+        font-size: 28px;
+    }
+    
+    .price-note {
+        font-size: 14px;
+    }
+    
+    .urgency-text {
+        font-size: 16px !important;
+        padding: 5px 10px !important;
+    }
+    
+    .campaign-section {
+        padding: 25px;
+    }
+    
+    /* Cenevre hikayesi kutusu mobilde */
+    .long-quote {
+        margin: 20px 3px;
+        padding: 20px 12px;
+        border-radius: 6px;
+    }
+    
+    .long-quote p {
+        font-size: 16px;
+        line-height: 1.6;
+        text-align: left;
+        word-spacing: normal;
+        letter-spacing: normal;
+        hyphens: none;
+    }
+    
+    /* Bilimsel sonuçlar tablosu ve sonrası tüm bölümler */
+    .scientific-results {
+        margin: 30px 3px;
+        padding: 20px 12px;
+    }
+    
+    .xray-comparison-section {
+        margin: 20px 3px;
+    }
+    
+    .results-table {
+        margin: 20px 3px;
+    }
+    
+    .testimonial-grid {
+        margin: 25px 3px;
+    }
+    
+    .testimonial {
+        margin: 15px 3px;
+        padding: 15px 10px;
+    }
+    
+    .info-box {
+        margin: 25px 3px;
+        padding: 20px 12px;
+    }
+    
+    .campaign-section {
+        margin: 20px 3px;
+        padding: 20px 12px;
+    }
+    
+    .deadline-container {
+        margin: 20px 3px;
+        padding: 20px 12px;
+    }
+    
+    .urgent-update-container {
+        margin: 25px 3px;
+        padding: 20px 12px;
+    }
+    
+    .order-form-section {
+        margin: 30px 5px;
+        padding: 20px 10px;
+        max-width: calc(100% - 10px);
+    }
+    
+    /* Mobilde tüm paragraflar için global düzenleme */
+    p {
+        word-spacing: normal;
+        letter-spacing: normal;
+        hyphens: none;
+        text-align: left;
+    }
+    
+    .article-body p,
+    .testimonial p,
+    .info-box p,
+    .warning-box p,
+    .reminder-box p,
+    .urgent-update-container p {
+        text-align: left;
+        word-spacing: normal;
+        letter-spacing: normal;
+    }
+}
+
+/* Animasyonlar */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.news-article {
+    animation: fadeInUp 0.6s ease-out;
+}
+
+/* Yazdırma Stilleri */
+@media print {
+    .main-header,
+    .sidebar,
+    .social-share,
+    .order-form-section {
+        display: none;
+    }
+    
+    .main-content .container {
+        grid-template-columns: 1fr;
+    }
+    
+    .news-article {
+        box-shadow: none;
+        padding: 0;
+    }
+    
+    * {
+        color: #000 !important;
+        background: #fff !important;
+    }
+}
+
+/* Loading, Success ve Error Mesaj Stilleri */
+.loading-container {
+    text-align: center;
+    padding: 40px 20px;
+    background: #f8f9fa;
+    border-radius: 15px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+}
+
+.loading-spinner {
+    width: 50px;
+    height: 50px;
+    border: 4px solid #e9ecef;
+    border-top: 4px solid #d41f2c;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin: 0 auto 20px auto;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.loading-container h3 {
+    color: #d41f2c;
+    font-size: 24px;
+    margin-bottom: 15px;
+    font-weight: 600;
+}
+
+.loading-container p {
+    color: #6c757d;
+    font-size: 16px;
+    margin: 0;
+}
+
+/* Success Container */
+.success-container {
+    text-align: center;
+    padding: 40px 5px;
+    background: #f8f9fa;
+    border: none;
+    border-radius: 0;
+    box-shadow: none;
+}
+
+
+
+.success-icon {
+    width: 80px;
+    height: 80px;
+    background: linear-gradient(135deg, #28a745, #218838);
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 40px;
+    font-weight: bold;
+    margin: 0 auto 20px auto;
+    box-shadow: 0 4px 15px rgba(40, 167, 69, 0.3);
+
+}
+
+
+
+.success-container h3 {
+    color: #155724;
+    font-size: 26px;
+    margin-bottom: 20px;
+    font-weight: 700;
+}
+
+.success-details p {
+    color: #155724;
+    margin-bottom: 15px;
+    font-size: 16px;
+    line-height: 1.6;
+}
+
+.success-details strong {
+    color: #0d4620;
+    font-weight: 600;
+}
+
+.next-steps {
+    margin: 20px 0;
+    text-align: left;
+}
+
+.next-steps h4 {
+    color: #0d4620;
+    font-size: 18px;
+    margin-bottom: 15px;
+    text-align: center;
+}
+
+.next-steps ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.next-steps li {
+    padding: 10px 0;
+    border-bottom: 1px solid rgba(21, 87, 36, 0.1);
+    color: #155724;
+    font-size: 15px;
+    line-height: 1.5;
+}
+
+.next-steps li:last-child {
+    border-bottom: none;
+}
+
+.important-note {
+    background: linear-gradient(135deg, #fff3cd, #ffeaa7);
+    border: 2px solid #ffc107;
+    padding: 15px;
+    border-radius: 8px;
+    margin: 15px 0;
+}
+
+.important-note h4 {
+    color: #856404;
+    font-size: 16px;
+    margin-bottom: 10px;
+}
+
+.important-note p {
+    color: #856404;
+    margin: 0;
+    font-size: 14px;
+}
+
+.contact-info {
+    background: rgba(255, 255, 255, 0.8);
+    padding: 15px;
+    border-radius: 8px;
+    margin-top: 20px;
+}
+
+.contact-info p {
+    color: #155724;
+    margin: 0;
+    font-size: 14px;
+    line-height: 1.4;
+}
+
+/* Error Container */
+.error-container {
+    text-align: center;
+    padding: 40px 5px;
+    background: #fff;
+    border: 1px solid #e9ecef;
+    border-radius: 0;
+    box-shadow: none;
+}
+
+
+
+.error-icon {
+    font-size: 40px;
+    margin-bottom: 20px;
+    color: #999;
+}
+
+
+
+.error-container h3 {
+    color: #333;
+    font-size: 22px;
+    margin-bottom: 20px;
+    font-weight: 500;
+}
+
+.error-details p {
+    color: #666;
+    margin-bottom: 15px;
+    font-size: 16px;
+    line-height: 1.6;
+}
+
+.error-message {
+    background: #f8f9fa;
+    padding: 15px;
+    border-radius: 4px;
+    margin: 15px 0;
+    border-left: 3px solid #999;
+    font-family: inherit;
+    font-size: 14px;
+    color: #666;
+}
+
+.retry-options {
+    background: #f8f9fa;
+    padding: 20px 0;
+    border-radius: 0;
+    margin: 20px 0;
+    text-align: left;
+}
+
+.retry-options h4 {
+    color: #333;
+    font-size: 18px;
+    margin-bottom: 15px;
+    text-align: center;
+    font-weight: 500;
+}
+
+.retry-options ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.retry-options li {
+    padding: 8px 0;
+    border-bottom: 1px solid #e9ecef;
+    color: #666;
+    font-size: 15px;
+    line-height: 1.5;
+}
+
+.retry-options li:last-child {
+    border-bottom: none;
+}
+
+.retry-button-container {
+    margin: 25px 0 15px 0;
+}
+
+.retry-button {
+    background: #333;
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 4px;
+    font-size: 16px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.3s ease;
+    box-shadow: none;
+}
+
+.retry-button:hover {
+    background: #222;
+}
+
+
+
+/* Mobile Responsive Adjustments for Messages */
+@media (max-width: 768px) {
+    .loading-container,
+    .success-container,
+    .error-container {
+        padding: 30px 5px;
+        margin: 20px 5px;
+    }
+    
+    .success-icon {
+        width: 60px;
+        height: 60px;
+        font-size: 30px;
+    }
+    
+    .loading-container h3,
+    .success-container h3,
+    .error-container h3 {
+        font-size: 20px;
+    }
+    
+    .next-steps,
+    .retry-options {
+        padding: 15px;
+    }
+    
+    .retry-button {
+        width: 100%;
+        padding: 12px 20px;
+        font-size: 15px;
+    }
+}
+
+@media (max-width: 480px) {
+    .loading-container,
+    .success-container,
+    .error-container {
+        padding: 25px 5px;
+        margin: 15px 5px;
+    }
+    
+    .loading-container h3,
+    .success-container h3,
+    .error-container h3 {
+        font-size: 18px;
+    }
+    
+    .success-details p,
+    .error-details p {
+        font-size: 14px;
+    }
+    
+    .next-steps li,
+    .retry-options li {
+        font-size: 14px;
+        padding: 6px 0;
+    }
+}
+

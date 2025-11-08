@@ -1,0 +1,20 @@
+2025/11/04 12:12:47 Warning: filebrowser.db can't be found. Initialing in /home/root/webapp/
+2025/11/04 12:12:47 Using database: /home/root/webapp/filebrowser.db
+2025/11/04 12:12:47 Using config file: .filebrowser.json
+2025/11/04 12:12:47 Performing quick setup
+2025/11/04 12:12:47 User 'admin' initialized with randomly generated password: CF_QesaDmnp1kkaE
+2025/11/04 12:12:47 Listening on [::]:9000
+2025/11/04 12:21:19 /api/users/1: 401 85.98.16.30 <nil>
+2025/11/04 12:21:26 /api/login: 403 85.98.16.30 <nil>
+2025/11/04 12:21:39 /api/login: 403 85.98.16.30 <nil>
+2025/11/04 12:21:41 /api/login: 403 85.98.16.30 <nil>
+2025/11/04 12:21:42 /api/login: 403 85.98.16.30 <nil>
+2025/11/04 12:21:51 /api/login: 403 85.98.16.30 <nil>
+2025/11/04 12:22:07 /api/login: 403 85.98.16.30 <nil>
+2025/11/04 12:22:08 /api/login: 403 85.98.16.30 <nil>
+2025/11/04 12:22:10 /api/login: 403 85.98.16.30 <nil>
+2025/11/04 12:22:10 /api/login: 403 85.98.16.30 <nil>
+2025/11/04 12:22:10 /api/login: 403 85.98.16.30 <nil>
+2025/11/04 12:22:10 /api/login: 403 85.98.16.30 <nil>
+2025/11/04 12:22:11 /api/login: 403 85.98.16.30 <nil>
+2025/11/04 12:22:22 /api/login: 403 85.98.16.30 <nil>

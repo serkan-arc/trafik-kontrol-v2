@@ -1,62 +1,8 @@
-# Dependencies
-node_modules/
-package-lock.json
 
-# Runtime data
-pids
-*.pid
-*.seed
-*.pid.lock
-
-# Build output
-dist/
-build/
-
-# Environment variables
-.env
-.env.local
-.env.production
-.dev.vars
-
-# PM2
-.pm2/
-pids/
-logs/
-*.log
-
-# Wrangler
-.wrangler/
-
-# OS generated files
-.DS_Store
-.DS_Store?
-._*
-.Spotlight-V100
-.Trashes
-ehthumbs.db
-Thumbs.db
-
-# Editor directories and files
-.vscode/
-.idea/
-*.suo
-*.ntvs*
-*.njsproj
-*.sln
-*.sw?
-
-# Backup files
-*.backup
-*.bak
+# Large backup files
+*.tar.gz
 *.zip
-
-# Allow important backups in backups/ directory
-!backups/*.tar.gz
-
-# Ignore extracted analysis
-analysis/trafik-kontrol/webapp/
-
-# SQLite database runtime files
-*.db-shm
-*.db-wal
-*.db-journal
+backups/
+*backup*.tar.gz
+traffic-control-system.old-with-nginx-*/
+node_modules/

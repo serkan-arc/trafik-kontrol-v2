@@ -1,0 +1,783 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OZPHYZEN - Eklem Ağrısı Desteği | Ücretsiz Danışmanlık</title>
+    <meta name="description" content="OZPHYZEN Ferahlatıcı Masaj Jeli - Glucosamine, Chondroitin ve 15+ doğal içerikle eklem ağrısı desteği. WhatsApp'tan ücretsiz danışmanlık alın.">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(to bottom, #f8f9fa 0%, #ffffff 100%);
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Header */
+        .header {
+            text-align: center;
+            padding: 20px 0;
+            background: white;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .logo {
+            max-width: 180px;
+            height: auto;
+        }
+
+        /* Live Indicator */
+        .live-indicator {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 12px;
+            background: white;
+            border-bottom: 1px solid #e0e0e0;
+            font-size: 14px;
+        }
+
+        .pulse-dot {
+            width: 8px;
+            height: 8px;
+            background: #ff4444;
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        /* Hero Section */
+        .hero {
+            text-align: center;
+            padding: 40px 20px;
+        }
+
+        .badge {
+            display: inline-block;
+            background: linear-gradient(135deg, #ff4444 0%, #cc0000 100%);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 25px;
+            font-size: 14px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 12px rgba(255,68,68,0.4);
+            animation: badge-pulse 2s infinite;
+        }
+
+        @keyframes badge-pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        h1 {
+            font-size: 30px;
+            font-weight: 800;
+            color: #cc0000;
+            margin-bottom: 16px;
+            line-height: 1.2;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+        }
+
+        .subtitle {
+            font-size: 17px;
+            color: #333;
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+
+        .subtitle strong {
+            color: #ff4444;
+            font-size: 19px;
+        }
+
+        .pain-points {
+            background: linear-gradient(135deg, #fff5f5 0%, #ffe0e0 100%);
+            border-left: 4px solid #ff4444;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            box-shadow: 0 4px 12px rgba(255,68,68,0.2);
+        }
+
+        .pain-item {
+            font-size: 16px;
+            font-weight: 600;
+            color: #cc0000;
+            margin: 8px 0;
+            text-align: left;
+        }
+
+        /* Product Image */
+        .product-image-container {
+            position: relative;
+            margin: 30px 0;
+        }
+
+        .product-image {
+            width: 100%;
+            max-width: 350px;
+            height: auto;
+            border-radius: 12px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+        }
+
+        .price-badge {
+            position: absolute;
+            top: -15px;
+            right: 20px;
+            background: linear-gradient(135deg, #ff4444 0%, #cc0000 100%);
+            color: white;
+            padding: 15px 20px;
+            border-radius: 12px;
+            box-shadow: 0 8px 24px rgba(255,68,68,0.4);
+        }
+
+        .price-badge .label {
+            font-size: 11px;
+            opacity: 0.9;
+            display: block;
+        }
+
+        .price-badge .price {
+            font-size: 28px;
+            font-weight: 700;
+        }
+
+        .price-badge .old-price {
+            font-size: 14px;
+            text-decoration: line-through;
+            opacity: 0.8;
+        }
+
+        /* Benefits */
+        .benefits {
+            background: white;
+            border-radius: 12px;
+            padding: 30px 20px;
+            margin: 30px 0;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+        }
+
+        .benefit-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 0;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .benefit-item:last-child {
+            border-bottom: none;
+        }
+
+        .check-icon {
+            width: 24px;
+            height: 24px;
+            background: linear-gradient(135deg, #4caf50 0%, #45a049 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 16px;
+            flex-shrink: 0;
+        }
+
+        .benefit-text {
+            font-size: 15px;
+            font-weight: 500;
+            color: #333;
+        }
+
+        /* WhatsApp CTA */
+        .whatsapp-cta {
+            position: sticky;
+            bottom: 20px;
+            margin: 40px 0 20px 0;
+        }
+
+        .whatsapp-button {
+            display: block;
+            width: 100%;
+            background: linear-gradient(135deg, #25D366 0%, #128C7E 100%);
+            color: white;
+            text-decoration: none;
+            padding: 24px;
+            border-radius: 50px;
+            font-size: 20px;
+            font-weight: 800;
+            text-align: center;
+            box-shadow: 0 12px 32px rgba(37,211,102,0.5);
+            transition: all 0.3s ease;
+            border: 3px solid #fff;
+            cursor: pointer;
+            animation: button-glow 2s infinite;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .whatsapp-button::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.3), transparent);
+            transform: rotate(45deg);
+            animation: shine 3s infinite;
+        }
+
+        @keyframes shine {
+            0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
+            100% { transform: translateX(100%) translateY(100%) rotate(45deg); }
+        }
+
+        @keyframes button-glow {
+            0%, 100% { box-shadow: 0 12px 32px rgba(37,211,102,0.5); }
+            50% { box-shadow: 0 12px 40px rgba(37,211,102,0.8), 0 0 20px rgba(37,211,102,0.5); }
+        }
+
+        .whatsapp-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 32px rgba(37,211,102,0.5);
+        }
+
+        .whatsapp-button:active {
+            transform: translateY(0);
+        }
+
+        .whatsapp-icon {
+            display: inline-block;
+            margin-right: 8px;
+            font-size: 24px;
+        }
+
+        .response-time {
+            text-align: center;
+            margin-top: 12px;
+            font-size: 14px;
+            color: #666;
+        }
+
+        .response-time strong {
+            color: #25D366;
+        }
+
+        /* Trust Badges */
+        .trust-badges {
+            display: flex;
+            justify-content: space-around;
+            gap: 10px;
+            margin: 30px 0;
+            flex-wrap: wrap;
+        }
+
+        .trust-badge {
+            flex: 1;
+            min-width: 100px;
+            text-align: center;
+            padding: 15px 10px;
+            background: white;
+            border-radius: 8px;
+            border: 1px solid #e0e0e0;
+        }
+
+        .trust-badge .icon {
+            font-size: 24px;
+            margin-bottom: 8px;
+        }
+
+        .trust-badge .text {
+            font-size: 12px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        /* Social Proof */
+        .social-proof {
+            text-align: center;
+            padding: 25px;
+            background: linear-gradient(135deg, #fff8f0 0%, #ffe0b2 100%);
+            border: 3px solid #ff9800;
+            border-radius: 12px;
+            margin: 30px 0;
+            box-shadow: 0 8px 24px rgba(255,152,0,0.3);
+            animation: proof-pop 4s infinite;
+        }
+
+        @keyframes proof-pop {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+        }
+
+        .social-proof .stat {
+            font-size: 32px;
+            font-weight: 800;
+            color: #ff6f00;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+
+        /* Urgency */
+        .urgency {
+            background: linear-gradient(135deg, #ff4444 0%, #cc0000 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+            margin: 20px 0;
+            font-weight: 700;
+            font-size: 17px;
+            animation: urgent-shake 3s infinite;
+            box-shadow: 0 8px 24px rgba(255,68,68,0.5);
+            border: 3px solid #fff;
+        }
+
+        @keyframes urgent-shake {
+            0%, 100% { transform: translateX(0); }
+            10%, 30%, 50%, 70%, 90% { transform: translateX(-2px); }
+            20%, 40%, 60%, 80% { transform: translateX(2px); }
+        }
+
+        /* Floating WhatsApp Button */
+        .floating-whatsapp {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 60px;
+            height: 60px;
+            background: #25D366;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 12px rgba(37,211,102,0.4);
+            cursor: pointer;
+            z-index: 1000;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        /* Scarcity Timer */
+        .scarcity-timer {
+            background: linear-gradient(135deg, #000000 0%, #333333 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+            margin: 20px 0;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+        }
+
+        .timer-text {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 10px;
+            letter-spacing: 1px;
+        }
+
+        .timer-display {
+            font-size: 36px;
+            font-weight: 800;
+            font-family: 'Courier New', monospace;
+            color: #ff4444;
+            text-shadow: 0 0 10px rgba(255,68,68,0.8);
+        }
+
+        @keyframes number-flash {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; color: #ffff00; }
+        }
+
+        /* Live Notification */
+        .live-notification {
+            position: fixed;
+            bottom: 100px;
+            left: 20px;
+            background: linear-gradient(135deg, #ffffff 0%, #f0f0f0 100%);
+            border: 2px solid #4caf50;
+            border-radius: 12px;
+            padding: 15px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+            z-index: 999;
+            max-width: 300px;
+            animation: slideInLeft 0.5s ease-out, fadeOut 0.5s ease-out 4.5s forwards;
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .notification-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #4caf50 0%, #45a049 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            flex-shrink: 0;
+        }
+
+        .notification-name {
+            font-weight: 700;
+            font-size: 13px;
+            color: #333;
+        }
+
+        .notification-action {
+            font-size: 12px;
+            color: #4caf50;
+            font-weight: 600;
+        }
+
+        @keyframes slideInLeft {
+            from { transform: translateX(-100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        @keyframes fadeOut {
+            to { opacity: 0; transform: translateX(-20px); }
+        }
+
+        .floating-whatsapp svg {
+            width: 32px;
+            height: 32px;
+            fill: white;
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 30px 20px;
+            font-size: 12px;
+            color: #999;
+            border-top: 1px solid #e0e0e0;
+            margin-top: 40px;
+        }
+
+        .disclaimer {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            font-size: 11px;
+            color: #666;
+            line-height: 1.5;
+        }
+
+        /* Responsive */
+        @media (max-width: 480px) {
+            h1 {
+                font-size: 24px;
+            }
+
+            .whatsapp-button {
+                font-size: 16px;
+                padding: 18px;
+            }
+
+            .price-badge {
+                right: 10px;
+            }
+
+            .price-badge .price {
+                font-size: 24px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <div class="header">
+        <img src="/ozphyzen-logo.png" alt="OZPHYZEN Logo" class="logo">
+    </div>
+
+    <!-- Live Indicator -->
+    <div class="live-indicator">
+        <span class="pulse-dot"></span>
+        <span><strong>CANLI</strong> - <span id="viewer-count">2,388</span> kişi şu anda izliyor</span>
+    </div>
+
+    <!-- Main Container -->
+    <div class="container">
+        <!-- Hero -->
+        <div class="hero">
+            <div class="badge">
+                ⚡ SON 24 SAAT: 247 KİŞİ ALDI • STOKLAR TÜKENİYOR!
+            </div>
+
+            <h1>🚨 Eklem Ağrınız Hayatınızı Çalıyor mu?</h1>
+            
+            <p class="subtitle">
+                <strong>Artık yeter!</strong> Merdiven çıkmak işkence olmaktan çıkacak.<br>
+                Sabahları sancısız uyanmanın keyfini yaşayın.
+            </p>
+            
+            <div class="pain-points">
+                <div class="pain-item">❌ Her hareket ağrı mı?</div>
+                <div class="pain-item">❌ İlaçlar işe yaramadı mı?</div>
+                <div class="pain-item">❌ Doktorlar çözüm bulamadı mı?</div>
+            </div>
+
+            <!-- Product Image -->
+            <div class="product-image-container">
+                <img src="/ozphyzen-product.jpg" alt="OZPHYZEN Ferahlatıcı Masaj Jeli" class="product-image">
+                
+                <div class="price-badge">
+                    <span class="label">Kampanya Fiyatı</span>
+                    <div class="price">799₺</div>
+                    <span class="old-price">1.600₺</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Benefits -->
+        <div class="benefits">
+            <div class="benefit-item">
+                <span class="check-icon">✓</span>
+                <span class="benefit-text">Eklem ağrısı ve kas rahatsızlığı desteği</span>
+            </div>
+            <div class="benefit-item">
+                <span class="check-icon">✓</span>
+                <span class="benefit-text">%100 doğal bitkisel formül (20 aktif madde)</span>
+            </div>
+            <div class="benefit-item">
+                <span class="check-icon">✓</span>
+                <span class="benefit-text">Hızlı emilen, yapışkan olmayan doku</span>
+            </div>
+            <div class="benefit-item">
+                <span class="check-icon">✓</span>
+                <span class="benefit-text">Dermatolojik test edilmiş, güvenli kullanım</span>
+            </div>
+        </div>
+
+        <!-- Social Proof -->
+        <div class="social-proof">
+            ⭐⭐⭐⭐⭐ <span class="stat">4.8/5</span><br>
+            <strong style="font-size: 22px;">5,247+</strong> kişi hayatını değiştirdi!<br>
+            <div style="margin-top: 12px; font-size: 14px; color: #ff6f00; font-weight: 700;">
+                🔥 Son 1 saatte <span id="recent-orders" style="font-size: 20px;">38</span> kişi daha sipariş verdi!
+            </div>
+        </div>
+
+        <!-- Live Purchase Notification -->
+        <div id="live-notification" class="live-notification" style="display: none;">
+            <div class="notification-avatar">👤</div>
+            <div class="notification-content">
+                <div class="notification-name">Mehmet Y. - İstanbul</div>
+                <div class="notification-action">✅ Az önce sipariş verdi</div>
+            </div>
+        </div>
+
+        <!-- Urgency -->
+        <div class="urgency">
+            🚨 ACİL! Bu Sayfayı Kapattığınızda Kampanya Sona Erecek!<br>
+            ⏰ Stokta Sadece <span id="stock-count" style="font-size: 24px; animation: number-flash 1s infinite;">47</span> Adet Kaldı!
+        </div>
+
+        <!-- Scarcity Timer -->
+        <div class="scarcity-timer">
+            <div class="timer-text">⏱️ KAMPANYA BİTİYOR:</div>
+            <div class="timer-display">
+                <span id="timer-hours">00</span>:<span id="timer-minutes">14</span>:<span id="timer-seconds">47</span>
+            </div>
+        </div>
+
+        <!-- WhatsApp CTA -->
+        <div class="whatsapp-cta">
+            <a href="https://wa.me/905551234567?text=Merhaba!%20OZPHYZEN%20Ferahlatıcı%20Masaj%20Jeli%20hakkında%20bilgi%20almak%20istiyorum." 
+               class="whatsapp-button"
+               onclick="trackWhatsAppClick()">
+                <span class="whatsapp-icon">💬</span>
+                AĞRISIZ YAŞAYIN! HEMEN WHATSAPP'TAN YAZIN
+            </a>
+            <p class="response-time">
+                ⏰ <strong>ŞİMDİ YAZANLAR 2 DAKİKADA CEVAP ALIYOR!</strong><br>
+                <span style="color: #ff4444; font-weight: 700;">+ ÜCRETSİZ KARGO FIRSATI!</span>
+            </p>
+        </div>
+
+        <!-- Trust Badges -->
+        <div class="trust-badges">
+            <div class="trust-badge">
+                <div class="icon">🚚</div>
+                <div class="text">Ücretsiz Kargo</div>
+            </div>
+            <div class="trust-badge">
+                <div class="icon">💳</div>
+                <div class="text">Kapıda Ödeme</div>
+            </div>
+            <div class="trust-badge">
+                <div class="icon">↩️</div>
+                <div class="text">14 Gün İade</div>
+            </div>
+        </div>
+
+        <!-- Disclaimer -->
+        <div class="disclaimer">
+            <strong>⚠️ ÖNEMLİ:</strong> Bu ürün kozmetik bir üründür, ilaç değildir. 
+            5324 sayılı Kozmetik Kanunu kapsamında üretilmiştir. Hastalıkların tedavisinde kullanılmaz. 
+            Sağlık sorununuz varsa doktorunuza danışın.
+        </div>
+    </div>
+
+    <!-- Floating WhatsApp Button -->
+    <div class="floating-whatsapp" onclick="openWhatsApp()">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/>
+        </svg>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+        <p><strong>NOVABIOSALE Kozmetik Ltd. Şti.</strong></p>
+        <p>Koşuyolu Mah. Katip Salih Sk. No:12/4 Kadıköy/İstanbul</p>
+        <p>support@novabiosale.com | Hafta içi 09:00-18:00</p>
+        <p style="margin-top: 20px;">© 2025 OZPHYZEN. Tüm hakları saklıdır.</p>
+    </div>
+
+    <script>
+        // Live viewer counter animation
+        let currentViewers = 2388;
+        const minViewers = 2200;
+        const maxViewers = 2600;
+
+        function updateViewerCount() {
+            const change = Math.floor(Math.random() * 26) - 10;
+            currentViewers += change;
+
+            if (currentViewers < minViewers) currentViewers = minViewers + Math.floor(Math.random() * 50);
+            if (currentViewers > maxViewers) currentViewers = maxViewers - Math.floor(Math.random() * 50);
+
+            document.getElementById('viewer-count').textContent = currentViewers.toLocaleString('tr-TR');
+        }
+
+        setInterval(updateViewerCount, Math.random() * 4000 + 3000);
+
+        // Countdown Timer
+        let timeLeft = 887; // 14 minutes 47 seconds
+
+        function updateTimer() {
+            if (timeLeft > 0) {
+                timeLeft--;
+                
+                const hours = Math.floor(timeLeft / 3600);
+                const minutes = Math.floor((timeLeft % 3600) / 60);
+                const seconds = timeLeft % 60;
+
+                document.getElementById('timer-hours').textContent = String(hours).padStart(2, '0');
+                document.getElementById('timer-minutes').textContent = String(minutes).padStart(2, '0');
+                document.getElementById('timer-seconds').textContent = String(seconds).padStart(2, '0');
+            }
+        }
+
+        setInterval(updateTimer, 1000);
+
+        // Stock counter animation
+        let stock = 47;
+        setInterval(() => {
+            if (Math.random() > 0.7 && stock > 15) {
+                stock--;
+                document.getElementById('stock-count').textContent = stock;
+            }
+        }, 30000); // Her 30 saniyede %30 şans
+
+        // Live Purchase Notifications
+        const names = [
+            {name: 'Ayşe K.', city: 'İstanbul'},
+            {name: 'Mehmet D.', city: 'Ankara'},
+            {name: 'Fatma Y.', city: 'İzmir'},
+            {name: 'Ali T.', city: 'Bursa'},
+            {name: 'Zeynep A.', city: 'Antalya'},
+            {name: 'Hasan Ö.', city: 'Adana'},
+            {name: 'Elif S.', city: 'Konya'},
+            {name: 'Osman B.', city: 'Gaziantep'}
+        ];
+
+        function showLiveNotification() {
+            const notification = document.getElementById('live-notification');
+            const randomPerson = names[Math.floor(Math.random() * names.length)];
+            
+            notification.querySelector('.notification-name').textContent = 
+                `${randomPerson.name} - ${randomPerson.city}`;
+            
+            notification.style.display = 'flex';
+            
+            setTimeout(() => {
+                notification.style.display = 'none';
+            }, 5000);
+        }
+
+        // İlk bildirim 5 saniye sonra
+        setTimeout(showLiveNotification, 5000);
+
+        // Sonra her 15-25 saniyede bir
+        setInterval(() => {
+            showLiveNotification();
+        }, Math.random() * 10000 + 15000);
+
+        // Exit Intent - Sayfa kapatılırken
+        let exitIntentShown = false;
+        document.addEventListener('mouseleave', (e) => {
+            if (e.clientY <= 0 && !exitIntentShown) {
+                exitIntentShown = true;
+                if (confirm('⚠️ BEKLE!\n\n🎁 Şimdi WhatsApp\'tan yazarsan EKSTRA %10 İNDİRİM!\n\n💬 Hemen yazıp indirimini kap?')) {
+                    openWhatsApp();
+                }
+            }
+        });
+
+        // WhatsApp functions
+        function openWhatsApp() {
+            const message = 'Merhaba! OZPHYZEN Ferahlatıcı Masaj Jeli hakkında bilgi almak istiyorum.';
+            const phone = '905551234567'; // ⚠️ Kendi numaranı buraya yaz!
+            const url = `https://wa.me/${phone}?text=${encodeURIComponent(message)}`;
+            window.open(url, '_blank');
+        }
+
+        function trackWhatsAppClick() {
+            // Google Analytics tracking (if needed)
+            if (typeof gtag !== 'undefined') {
+                gtag('event', 'whatsapp_click', {
+                    'event_category': 'engagement',
+                    'event_label': 'WhatsApp Lead Button'
+                });
+            }
+
+            // Meta Pixel tracking (if needed)
+            if (typeof fbq !== 'undefined') {
+                fbq('trackCustom', 'WhatsAppClick', {
+                    content_name: 'OZPHYZEN WhatsApp Lead',
+                    value: 0,
+                    currency: 'TRY'
+                });
+            }
+        }
+    </script>
+</body>
+</html>
