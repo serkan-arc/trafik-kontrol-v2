@@ -1,6 +1,7 @@
 'use client';
 
 import Sidebar from './Sidebar';
+import { ToastContainer } from '@/components/ui/toast';
 
 interface DashboardLayoutProps {
   children: React.ReactNode;
@@ -16,6 +17,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
           {children}
         </main>
       </div>
+      <ToastContainer />
     </div>
   );
 }

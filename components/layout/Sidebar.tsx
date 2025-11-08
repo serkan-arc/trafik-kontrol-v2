@@ -12,30 +12,33 @@ interface MenuItem {
 }
 
 const trafficMenuItems: MenuItem[] = [
-  { label: 'Traffic Overview', href: '/dashboard/traffic/overview', icon: '🚦' },
-  { label: 'Master Control', href: '/dashboard/traffic/master', icon: '🎛️' },
+  { label: 'Traffic Overview', href: '/dashboard/traffic/overview', icon: '📈' },
+  { label: 'Master Control', href: '/dashboard/traffic/master', icon: '⚡' },
 ]
 
 // System Settings - Only system-wide settings remain
 const systemSettingsItems: MenuItem[] = [
-  { label: 'System Settings', href: '/dashboard/settings/system', icon: '🛠️' },
-  { label: 'Users', href: '/dashboard/settings/users', icon: '👥' },
-  { label: 'Notifications', href: '/dashboard/settings/notifications', icon: '🔔' },
+  { label: 'System Settings', href: '/dashboard/settings/system', icon: '⚙️' },
+  { label: 'Users', href: '/dashboard/settings/users', icon: '👤' },
+  { label: 'Panel Erişimleri', href: '/dashboard/settings/panel-access', icon: '🔑' },
+  { label: 'Notifications', href: '/dashboard/settings/notifications', icon: '📬' },
 ]
 
 // Site Management - Primary actions
 const siteManagementItems: MenuItem[] = [
-  { label: 'Siteler', href: '/dashboard/sites', icon: '🌐' },
-  { label: 'Yeni Site Ekle', href: '/dashboard/sites/deploy', icon: '🚀' },
-  { label: 'Site Yönetimi', href: '/dashboard/sites/manage', icon: '🗂️' },
+  { label: 'Siteler', href: '/dashboard/sites', icon: '📋' },
+  { label: 'Yeni Site Ekle', href: '/dashboard/sites/deploy', icon: '➕' },
+  { label: 'Site Yönetimi', href: '/dashboard/sites/manage', icon: '📂' },
 ]
 
 // System Information - Read-only monitoring
 const systemInfoItems: MenuItem[] = [
-  { label: 'Nginx Yönetimi', href: '/dashboard/sites/nginx', icon: '🌐' },
-  { label: 'SSL Sertifikaları', href: '/dashboard/sites/ssl', icon: '🔒' },
-  { label: 'PM2 Processes', href: '/dashboard/sites/processes', icon: '⚙️' },
-  { label: 'Debug Bilgileri', href: '/dashboard/sites/debug', icon: '🐛' },
+  { label: 'Sistem Monitörü', href: 'https://monitor.dtektracking.com', icon: '📊' },
+  { label: 'Dosya Yöneticisi', href: 'https://dosya.dtektracking.com', icon: '📁' },
+  { label: 'Nginx Yönetimi', href: '/dashboard/sites/nginx', icon: '🔧' },
+  { label: 'SSL Sertifikaları', href: '/dashboard/sites/ssl', icon: '🔐' },
+  { label: 'PM2 Processes', href: '/dashboard/sites/processes', icon: '⚡' },
+  { label: 'Debug Bilgileri', href: '/dashboard/sites/debug', icon: '🔍' },
 ]
 
 export default function Sidebar() {
@@ -148,21 +151,32 @@ export default function Sidebar() {
             Sistem Bilgileri
           </h3>
           <div className="space-y-1">
-            {systemInfoItems.map((item) => (
-              <Link
-                key={item.href}
-                href={item.href}
-                className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-all ${getActiveClass(item.href)}`}
-              >
-                <span className="text-xl">{item.icon}</span>
-                <span className="text-sm flex-1">{item.label}</span>
-                {item.badge && (
-                  <span className="text-xs bg-red-500 text-white px-2 py-0.5 rounded-full">
-                    {item.badge}
-                  </span>
-                )}
-              </Link>
-            ))}
+            {systemInfoItems.map((item) => {
+              const isExternal = item.href.startsWith('http')
+              const LinkComponent = isExternal ? 'a' : Link
+              const linkProps = isExternal 
+                ? { href: item.href, target: '_blank', rel: 'noopener noreferrer' }
+                : { href: item.href }
+              
+              return (
+                <LinkComponent
+                  key={item.href}
+                  {...linkProps}
+                  className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-all ${getActiveClass(item.href)}`}
+                >
+                  <span className="text-xl">{item.icon}</span>
+                  <span className="text-sm flex-1">{item.label}</span>
+                  {item.badge && (
+                    <span className="text-xs bg-red-500 text-white px-2 py-0.5 rounded-full">
+                      {item.badge}
+                    </span>
+                  )}
+                  {isExternal && (
+                    <span className="text-gray-400 text-xs">↗</span>
+                  )}
+                </LinkComponent>
+              )
+            })}
           </div>
         </div>
       </nav>
