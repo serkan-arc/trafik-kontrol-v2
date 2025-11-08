@@ -71,6 +71,16 @@ export default function PanelAccessPage() {
       password: 'DtekRedis2024!',
       hasAuth: true,
       description: 'Redis önbellek yönetimi ve izleme'
+    },
+    {
+      id: 'n8n',
+      name: 'n8n Automation',
+      url: 'https://n8n.dtektracking.com',
+      icon: '⚡',
+      username: 'serkan604@hotmail.com',
+      password: 'Esvella2025136326.',
+      hasAuth: true,
+      description: 'Workflow otomasyonu ve API entegrasyonları (1 Main + 5 Workers)'
     }
   ])
 
