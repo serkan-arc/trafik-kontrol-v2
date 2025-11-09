@@ -240,13 +240,13 @@ export default function PartnerDetailPage() {
         />
         <StatCard
           title="Bekleyen Komisyon"
-          value={`€${(partner.pending_commission || 0).toFixed(2)}`}
+          value={`€${(Number(partner.pending_commission) || 0).toFixed(2)}`}
           icon="💰"
           color="yellow"
         />
         <StatCard
           title="Onaylı Komisyon"
-          value={`€${(partner.approved_commission || 0).toFixed(2)}`}
+          value={`€${(Number(partner.approved_commission) || 0).toFixed(2)}`}
           icon="✅"
           color="green"
         />

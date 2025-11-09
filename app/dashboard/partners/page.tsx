@@ -244,7 +244,7 @@ function PartnerCard({ partner }: { partner: Partner }) {
           <div className="bg-gray-50 p-3 rounded">
             <div className="text-xs text-gray-600 mb-1">Bekleyen Komisyon</div>
             <div className="text-lg font-bold text-yellow-600">
-              €{(partner.pending_commission || 0).toFixed(2)}
+              €{(Number(partner.pending_commission) || 0).toFixed(2)}
             </div>
           </div>
         </div>

@@ -247,11 +247,11 @@ function PerformancePageContent() {
                   <div className="grid grid-cols-2 gap-3">
                     <div>
                       <p className="text-xs text-green-700">Bekleyen</p>
-                      <p className="text-lg font-bold text-yellow-600">€{perf.pending_commission.toFixed(2)}</p>
+                      <p className="text-lg font-bold text-yellow-600">€{(Number(perf.pending_commission) || 0).toFixed(2)}</p>
                     </div>
                     <div>
                       <p className="text-xs text-green-700">Onaylı</p>
-                      <p className="text-lg font-bold text-green-600">€{perf.approved_commission.toFixed(2)}</p>
+                      <p className="text-lg font-bold text-green-600">€{(Number(perf.approved_commission) || 0).toFixed(2)}</p>
                     </div>
                     <div>
                       <p className="text-xs text-green-700">Ödenen</p>
