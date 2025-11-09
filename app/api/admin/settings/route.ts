@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
-import db from '@/lib/db';
+import { query } from '@/lib/db';
 
 /**
  * GET /api/admin/settings
@@ -30,7 +30,34 @@ const settingsSchema = z.object({
 // GET - Get settings
 export async function GET(request: NextRequest) {
   try {
-    const result = await db.query(
+    // Check if database connection is available (not during build)
+    if (!process.env.POSTGRES_URL && !process.env.POSTGRES_URL_NON_POOLING) {
+      // Return default settings during build
+      const defaultSettings = {
+        company_name: 'DTekTracking',
+        company_email: 'info@dtektracking.com',
+        company_phone: '',
+        default_currency: 'TRY',
+        default_timezone: 'Europe/Istanbul',
+        leads_per_page: 20,
+        session_timeout_minutes: 60,
+        enable_email_notifications: true,
+        enable_sms_notifications: false,
+        auto_assign_leads: false,
+        lead_duplicate_check_field: 'phone',
+        default_lead_status: 'new',
+        webhook_retry_attempts: 3,
+        max_export_rows: 10000,
+      };
+
+      return NextResponse.json({
+        success: true,
+        data: defaultSettings,
+        note: 'Using default settings (database not available)',
+      });
+    }
+
+    const result = await query(
       `SELECT * FROM system_settings ORDER BY id LIMIT 1`
     );
 
@@ -85,11 +112,19 @@ export async function GET(request: NextRequest) {
 // PUT - Update settings
 export async function PUT(request: NextRequest) {
   try {
+    // Check if database connection is available (not during build)
+    if (!process.env.POSTGRES_URL && !process.env.POSTGRES_URL_NON_POOLING) {
+      return NextResponse.json({
+        success: false,
+        error: 'Database connection not configured'
+      }, { status: 503 });
+    }
+
     const body = await request.json();
     const settingsData = settingsSchema.parse(body);
 
     // Check if settings exist
-    const existingSettings = await db.query(
+    const existingSettings = await query(
       `SELECT id FROM system_settings LIMIT 1`
     );
 
@@ -97,7 +132,7 @@ export async function PUT(request: NextRequest) {
 
     if (existingSettings.rows.length === 0) {
       // Insert new settings
-      result = await db.query(
+      result = await query(
         `INSERT INTO system_settings (settings, updated_at, created_at)
          VALUES ($1, NOW(), NOW())
          RETURNING *`,
@@ -106,7 +141,7 @@ export async function PUT(request: NextRequest) {
     } else {
       // Update existing settings
       const settingsId = existingSettings.rows[0].id;
-      result = await db.query(
+      result = await query(
         `UPDATE system_settings 
          SET settings = $1, updated_at = NOW()
          WHERE id = $2

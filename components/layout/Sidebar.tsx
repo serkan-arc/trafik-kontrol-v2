@@ -63,35 +63,17 @@ const menuSections: MenuSection[] = [
     ]
   },
   {
-    id: 'buyer-management',
-    title: 'Alıcı Yönetimi',
+    id: 'partner-management',
+    title: 'Partner Yönetimi',
     icon: '👥',
     items: [
-      { label: 'Alıcı Listesi', href: '/dashboard/buyers', icon: '📇' },
-      { label: 'Yeni Alıcı Ekle', href: '/dashboard/buyers/new', icon: '➕' },
-      { label: 'Anlaşmalar', href: '/dashboard/buyers/deals', icon: '💰' },
-      { label: 'Alıcı Performansı', href: '/dashboard/buyers/performance', icon: '📊' },
-    ]
-  },
-  {
-    id: 'commission-management',
-    title: 'Komisyon Yönetimi',
-    icon: '💰',
-    items: [
-      { label: 'Komisyon Listesi', href: '/dashboard/commissions', icon: '💵' },
-      { label: 'Onay Bekleyenler', href: '/dashboard/commissions/pending', icon: '✅' },
-      { label: 'Ödeme Geçmişi', href: '/dashboard/commissions/paid', icon: '💸' },
-      { label: 'Komisyon Raporları', href: '/dashboard/commissions/reports', icon: '📊' },
-    ]
-  },
-  {
-    id: 'product-management',
-    title: 'Ürün Yönetimi',
-    icon: '📦',
-    items: [
-      { label: 'Ürün Listesi', href: '/dashboard/products', icon: '🏷️' },
-      { label: 'Yeni Ürün Ekle', href: '/dashboard/products/new', icon: '➕' },
-      { label: 'Ürün Performansı', href: '/dashboard/products/performance', icon: '📊' },
+      { label: 'Partner Listesi', href: '/dashboard/partners', icon: '📇' },
+      { label: 'Yeni Partner Ekle', href: '/dashboard/partners/new', icon: '➕' },
+      { label: 'Anlaşmalar', href: '/dashboard/partners/deals', icon: '💰' },
+      { label: 'Komisyon Takibi', href: '/dashboard/partners/commissions', icon: '💵' },
+      { label: 'Onay Bekleyenler', href: '/dashboard/partners/commissions/pending', icon: '✅' },
+      { label: 'Ödeme Geçmişi', href: '/dashboard/partners/commissions/paid', icon: '💸' },
+      { label: 'Partner Performansı', href: '/dashboard/partners/performance', icon: '📊' },
     ]
   },
   {
@@ -102,6 +84,7 @@ const menuSections: MenuSection[] = [
       { label: 'Genel Dashboard', href: '/dashboard/reports', icon: '📈' },
       { label: 'Performans Raporları', href: '/dashboard/reports/performance', icon: '📉' },
       { label: 'Finansal Raporlar', href: '/dashboard/reports/financial', icon: '💹' },
+      { label: 'Ürün Performansı', href: '/dashboard/reports/products', icon: '🏷️' },
       { label: 'Excel Export', href: '/dashboard/reports/export', icon: '📥' },
     ]
   },
@@ -139,9 +122,7 @@ export default function Sidebar() {
     sites: true,
     'n8n-management': true,
     'lead-management': true,
-    'buyer-management': true,
-    'commission-management': true,
-    'product-management': true,
+    'partner-management': true,
     'reporting': true,
     settings: true,
     'system-info': true,
@@ -169,14 +150,35 @@ export default function Sidebar() {
     })
   }
 
+  // Check if current section is active (contains current pathname)
+  const isSectionActive = (section: MenuSection) => {
+    if (!mounted) return false
+    return section.items.some(item => {
+      // For external links, exact match only
+      if (item.href.startsWith('http')) return pathname === item.href
+      // For internal links, check if pathname starts with the href
+      return pathname === item.href || pathname.startsWith(item.href + '/')
+    })
+  }
+
+  // Get section header class with active highlight
+  const getSectionHeaderClass = (section: MenuSection) => {
+    const isActive = isSectionActive(section)
+    return `w-full flex items-center gap-2 px-4 py-2.5 text-xs font-bold uppercase tracking-wider rounded-lg transition-all ${
+      isActive 
+        ? 'bg-indigo-100 text-indigo-700 shadow-sm' 
+        : 'text-gray-700 hover:bg-gray-50'
+    }`
+  }
+
   // Prevent hydration mismatch by not highlighting active state until mounted
   const getActiveClass = (href: string) => {
     if (!mounted) {
-      return 'text-gray-900 hover:bg-indigo-50 hover:text-indigo-600'
+      return 'text-gray-700 hover:bg-indigo-50 hover:text-indigo-600 pl-8'
     }
     return pathname === href
-      ? 'bg-indigo-600 text-white font-semibold'
-      : 'text-gray-900 hover:bg-indigo-50 hover:text-indigo-600'
+      ? 'bg-indigo-600 text-white font-semibold pl-8'
+      : 'text-gray-700 hover:bg-indigo-50 hover:text-indigo-600 pl-8'
   }
 
   return (
@@ -195,17 +197,17 @@ export default function Sidebar() {
       <nav className="flex-1 p-4 overflow-y-auto">
         {menuSections.map((section) => (
           <div key={section.id} className="mb-2">
-            {/* Section Header - Clickable to expand/collapse */}
+            {/* Section Header - Clickable to expand/collapse with active highlight */}
             <button
               onClick={() => toggleSection(section.id)}
-              className="w-full flex items-center gap-2 px-4 py-2 text-xs font-semibold text-gray-700 uppercase tracking-wider hover:bg-gray-50 rounded-lg transition-colors"
+              className={getSectionHeaderClass(section)}
             >
-              <span className="text-base">{section.icon}</span>
+              <span className="text-lg">{section.icon}</span>
               <span className="flex-1 text-left">{section.title}</span>
               {expandedSections[section.id] ? (
-                <ChevronDown className="h-4 w-4 text-gray-400" />
+                <ChevronDown className="h-4 w-4" />
               ) : (
-                <ChevronRight className="h-4 w-4 text-gray-400" />
+                <ChevronRight className="h-4 w-4" />
               )}
             </button>
 
@@ -223,9 +225,9 @@ export default function Sidebar() {
                     <LinkComponent
                       key={item.href}
                       {...linkProps}
-                      className={`flex items-center gap-3 px-4 py-2.5 rounded-lg transition-all text-sm ${getActiveClass(item.href)}`}
+                      className={`flex items-center gap-3 py-2 rounded-lg transition-all text-sm ${getActiveClass(item.href)}`}
                     >
-                      <span className="text-lg">{item.icon}</span>
+                      <span className="text-base opacity-70">{item.icon}</span>
                       <span className="flex-1">{item.label}</span>
                       {item.badge && (
                         <span className="text-xs bg-red-500 text-white px-2 py-0.5 rounded-full">

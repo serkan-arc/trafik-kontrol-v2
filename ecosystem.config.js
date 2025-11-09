@@ -10,10 +10,14 @@ module.exports = {
       env: {
         NODE_ENV: 'production',
         PORT: 3001,
+        POSTGRES_URL: 'postgresql://postgres:T2hSWBtttsbYh7lZJFHNrfR2obeuXpnwNsM8wU0gaTHRFRL5c8a1QtYqT20DR58s@postgres.dtekai.com:5432/dtektracking',
+        POSTGRES_URL_NON_POOLING: 'postgresql://postgres:T2hSWBtttsbYh7lZJFHNrfR2obeuXpnwNsM8wU0gaTHRFRL5c8a1QtYqT20DR58s@postgres.dtekai.com:5432/dtektracking',
       },
       env_production: {
         NODE_ENV: 'production',
         PORT: 3001,
+        POSTGRES_URL: 'postgresql://postgres:T2hSWBtttsbYh7lZJFHNrfR2obeuXpnwNsM8wU0gaTHRFRL5c8a1QtYqT20DR58s@postgres.dtekai.com:5432/dtektracking',
+        POSTGRES_URL_NON_POOLING: 'postgresql://postgres:T2hSWBtttsbYh7lZJFHNrfR2obeuXpnwNsM8wU0gaTHRFRL5c8a1QtYqT20DR58s@postgres.dtekai.com:5432/dtektracking',
       },
       error_file: './logs/pm2-error.log',
       out_file: './logs/pm2-out.log',

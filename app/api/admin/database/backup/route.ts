@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import db from '@/lib/db';
+import { query } from '@/lib/db';
 
 /**
  * GET /api/admin/database/backup
@@ -11,11 +11,19 @@ import db from '@/lib/db';
 
 export async function GET(request: NextRequest) {
   try {
+    // Check if database connection is available (not during build)
+    if (!process.env.POSTGRES_URL && !process.env.POSTGRES_URL_NON_POOLING) {
+      return NextResponse.json({
+        success: false,
+        error: 'Database connection not configured'
+      }, { status: 503 });
+    }
+
     // Get database statistics
     const stats = await getDatabaseStats();
 
     // Create backup record
-    const backupRecord = await db.query(
+    const backupRecord = await query(
       `INSERT INTO database_backups 
       (backup_date, status, file_size_mb, records_count, created_at)
       VALUES (NOW(), $1, $2, $3, NOW())
@@ -58,7 +66,7 @@ async function getDatabaseStats() {
 
   for (const table of tables) {
     try {
-      const result = await db.query(`SELECT COUNT(*) as count FROM ${table}`);
+      const result = await query(`SELECT COUNT(*) as count FROM ${table}`);
       const count = parseInt(result.rows[0].count);
       stats.tables[table] = count;
       stats.total_records += count;

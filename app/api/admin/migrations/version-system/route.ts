@@ -10,14 +10,22 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server';
-import db from '@/lib/db';
+import { query } from '@/lib/db';
 
 export async function POST(request: NextRequest) {
   try {
+    // Check if database connection is available (not during build)
+    if (!process.env.POSTGRES_URL && !process.env.POSTGRES_URL_NON_POOLING) {
+      return NextResponse.json({
+        success: false,
+        error: 'Database connection not configured'
+      }, { status: 503 });
+    }
+
     console.log('🚀 Starting Version System migration...');
     
     // Create version_settings table
-    await db.query(`
+    await query(`
       CREATE TABLE IF NOT EXISTS version_settings (
           id SERIAL PRIMARY KEY,
           site_id INTEGER REFERENCES deployed_sites(id) ON DELETE CASCADE,
@@ -41,7 +49,7 @@ export async function POST(request: NextRequest) {
     console.log('✅ version_settings table created');
 
     // Create ip_version_history table
-    await db.query(`
+    await query(`
       CREATE TABLE IF NOT EXISTS ip_version_history (
           id SERIAL PRIMARY KEY,
           ip VARCHAR(45) NOT NULL,
@@ -62,7 +70,7 @@ export async function POST(request: NextRequest) {
     console.log('✅ ip_version_history table created');
 
     // Create version_statistics table
-    await db.query(`
+    await query(`
       CREATE TABLE IF NOT EXISTS version_statistics (
           id SERIAL PRIMARY KEY,
           site_id INTEGER REFERENCES deployed_sites(id) ON DELETE CASCADE,
@@ -86,7 +94,7 @@ export async function POST(request: NextRequest) {
     console.log('✅ version_statistics table created');
 
     // Create indexes
-    await db.query(`
+    await query(`
       CREATE INDEX IF NOT EXISTS idx_version_settings_site ON version_settings(site_id);
       CREATE INDEX IF NOT EXISTS idx_ip_version_ip ON ip_version_history(ip);
       CREATE INDEX IF NOT EXISTS idx_ip_version_site ON ip_version_history(site_id);
@@ -97,7 +105,7 @@ export async function POST(request: NextRequest) {
     console.log('✅ Indexes created');
 
     // Insert default global settings
-    await db.query(`
+    await query(`
       INSERT INTO version_settings (site_id, is_enabled, version_config) 
       VALUES (NULL, false, '{
           "clean": {
@@ -154,16 +162,24 @@ export async function POST(request: NextRequest) {
 // GET endpoint to check if tables exist
 export async function GET(request: NextRequest) {
   try {
+    // Check if database connection is available (not during build)
+    if (!process.env.POSTGRES_URL && !process.env.POSTGRES_URL_NON_POOLING) {
+      return NextResponse.json({
+        success: false,
+        error: 'Database connection not configured'
+      }, { status: 503 });
+    }
+
     const checks = await Promise.all([
-      db.query(`SELECT EXISTS (
+      query(`SELECT EXISTS (
         SELECT FROM information_schema.tables 
         WHERE table_name = 'version_settings'
       )`),
-      db.query(`SELECT EXISTS (
+      query(`SELECT EXISTS (
         SELECT FROM information_schema.tables 
         WHERE table_name = 'ip_version_history'
       )`),
-      db.query(`SELECT EXISTS (
+      query(`SELECT EXISTS (
         SELECT FROM information_schema.tables 
         WHERE table_name = 'version_statistics'
       )`)
