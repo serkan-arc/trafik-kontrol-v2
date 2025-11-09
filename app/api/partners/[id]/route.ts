@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server'
-// import { sql } from '@vercel/postgres'
+import { query } from '@/lib/db'
 
 export async function GET(
   request: Request,
@@ -8,36 +8,17 @@ export async function GET(
   try {
     const { id: partnerId } = await params
 
-    // TODO: Implement real database query when buyers table is ready
-    // For now, return mock empty data
-    
-    const partner = null
-    const deals: any[] = []
-    const recentCommissions: any[] = []
-
-    /* Real implementation when table is ready:
-    
     // Get partner details with stats
-    const partnerResult = await sql`
-      SELECT 
+    const partnerResult = await query(
+      `SELECT 
         b.*,
         COALESCE(s.total_leads, 0) as total_leads,
-        COALESCE(s.pending_commission, 0) as pending_commission,
-        COALESCE(s.approved_commission, 0) as approved_commission
+        COALESCE(s.pending_commission, 0) as pending_commission
       FROM buyers b
-      LEFT JOIN (
-        SELECT 
-          buyer_code,
-          COUNT(DISTINCT l.id) as total_leads,
-          SUM(c.commission_amount) FILTER (WHERE c.commission_status = 'pending') as pending_commission,
-          SUM(c.commission_amount) FILTER (WHERE c.commission_status = 'approved') as approved_commission
-        FROM buyers b2
-        LEFT JOIN n8n_leads l ON b2.buyer_code = l.buyer_code
-        LEFT JOIN buyer_commissions c ON b2.buyer_code = c.buyer_code
-        GROUP BY b2.buyer_code
-      ) s ON b.buyer_code = s.buyer_code
-      WHERE b.id = ${partnerId}
-    `
+      LEFT JOIN vw_partner_stats s ON b.buyer_code = s.buyer_code
+      WHERE b.id = $1`,
+      [partnerId]
+    )
     
     if (partnerResult.rows.length === 0) {
       return NextResponse.json(
@@ -49,8 +30,8 @@ export async function GET(
     const partner = partnerResult.rows[0]
     
     // Get active deals
-    const dealsResult = await sql`
-      SELECT 
+    const dealsResult = await query(
+      `SELECT 
         bd.id,
         bd.offer_id,
         o.offer_name,
@@ -61,37 +42,31 @@ export async function GET(
         bd.status
       FROM buyer_deals bd
       JOIN offers o ON bd.offer_id = o.offer_id
-      WHERE bd.buyer_code = ${partner.buyer_code}
-      ORDER BY bd.id DESC
-    `
+      WHERE bd.buyer_code = $1
+      ORDER BY bd.id DESC`,
+      [partner.buyer_code]
+    )
     
     const deals = dealsResult.rows
     
     // Get recent commissions (last 10)
-    const commissionsResult = await sql`
-      SELECT 
+    const commissionsResult = await query(
+      `SELECT 
         id,
         tracking_id,
-        commission_type,
-        commission_amount,
+        deal_type,
+        total_commission,
         currency,
-        commission_status,
+        status,
         created_at
       FROM buyer_commissions
-      WHERE buyer_code = ${partner.buyer_code}
+      WHERE buyer_code = $1
       ORDER BY created_at DESC
-      LIMIT 10
-    `
+      LIMIT 10`,
+      [partner.buyer_code]
+    )
     
     const recentCommissions = commissionsResult.rows
-    */
-
-    if (!partner) {
-      return NextResponse.json(
-        { success: false, error: 'Partner not found (Database not yet initialized)' },
-        { status: 404 }
-      )
-    }
 
     return NextResponse.json({
       success: true,
@@ -140,14 +115,11 @@ export async function PATCH(
       )
     }
 
-    // TODO: Implement partner update when table is ready
-    
-    /* Real implementation:
-    
     // Check if partner exists
-    const existingResult = await sql`
-      SELECT id FROM buyers WHERE id = ${partnerId}
-    `
+    const existingResult = await query(
+      'SELECT id FROM buyers WHERE id = $1',
+      [partnerId]
+    )
     
     if (existingResult.rows.length === 0) {
       return NextResponse.json(
@@ -157,34 +129,29 @@ export async function PATCH(
     }
     
     // Update partner
-    const result = await sql`
-      UPDATE buyers
+    const result = await query(
+      `UPDATE buyers
       SET 
-        buyer_name = ${buyer_name},
-        company_name = ${company_name},
-        email = ${email},
-        phone = ${phone},
-        contact_person = ${contact_person},
-        address = ${address},
-        country = ${country},
-        notes = ${notes},
-        status = ${status},
-        updated_at = CURRENT_TIMESTAMP
-      WHERE id = ${partnerId}
-      RETURNING *
-    `
+        buyer_name = $1,
+        company_name = $2,
+        email = $3,
+        phone = $4,
+        contact_person = $5,
+        address = $6,
+        country = $7,
+        notes = $8,
+        status = $9,
+        updated_at = NOW()
+      WHERE id = $10
+      RETURNING *`,
+      [buyer_name, company_name, email, phone, contact_person, address, country, notes, status, partnerId]
+    )
     
     return NextResponse.json({
       success: true,
       partner: result.rows[0],
       message: 'Partner updated successfully'
     })
-    */
-
-    return NextResponse.json({
-      success: false,
-      message: 'Database tables not yet created. Run migration first.'
-    }, { status: 501 })
 
   } catch (error: any) {
     console.error('Partner update error:', error)
@@ -205,14 +172,11 @@ export async function DELETE(
   try {
     const { id: partnerId } = await params
 
-    // TODO: Implement partner deletion when table is ready
-    
-    /* Real implementation:
-    
     // Check if partner exists
-    const existingResult = await sql`
-      SELECT id, buyer_code FROM buyers WHERE id = ${partnerId}
-    `
+    const existingResult = await query(
+      'SELECT id, buyer_code FROM buyers WHERE id = $1',
+      [partnerId]
+    )
     
     if (existingResult.rows.length === 0) {
       return NextResponse.json(
@@ -224,17 +188,17 @@ export async function DELETE(
     const partner = existingResult.rows[0]
     
     // Check if partner has active deals or pending commissions
-    const dealsResult = await sql`
-      SELECT COUNT(*) as count FROM buyer_deals 
-      WHERE buyer_code = ${partner.buyer_code} AND status = 'active'
-    `
+    const dealsResult = await query(
+      'SELECT COUNT(*) as count FROM buyer_deals WHERE buyer_code = $1 AND status = $2',
+      [partner.buyer_code, 'active']
+    )
     
-    const commissionsResult = await sql`
-      SELECT COUNT(*) as count FROM buyer_commissions 
-      WHERE buyer_code = ${partner.buyer_code} AND commission_status = 'pending'
-    `
+    const commissionsResult = await query(
+      'SELECT COUNT(*) as count FROM buyer_commissions WHERE buyer_code = $1 AND status = $2',
+      [partner.buyer_code, 'pending']
+    )
     
-    if (dealsResult.rows[0].count > 0 || commissionsResult.rows[0].count > 0) {
+    if (parseInt(dealsResult.rows[0].count) > 0 || parseInt(commissionsResult.rows[0].count) > 0) {
       return NextResponse.json(
         { 
           success: false, 
@@ -245,20 +209,15 @@ export async function DELETE(
     }
     
     // Delete partner (CASCADE will handle related records)
-    await sql`
-      DELETE FROM buyers WHERE id = ${partnerId}
-    `
+    await query(
+      'DELETE FROM buyers WHERE id = $1',
+      [partnerId]
+    )
     
     return NextResponse.json({
       success: true,
       message: 'Partner deleted successfully'
     })
-    */
-
-    return NextResponse.json({
-      success: false,
-      message: 'Database tables not yet created. Run migration first.'
-    }, { status: 501 })
 
   } catch (error: any) {
     console.error('Partner deletion error:', error)

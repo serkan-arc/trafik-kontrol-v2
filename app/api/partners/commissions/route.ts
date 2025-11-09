@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server'
-// import { sql } from '@vercel/postgres'
+import { query } from '@/lib/db'
 
 // GET - List all commissions with filters
 export async function GET(request: Request) {
@@ -10,18 +10,14 @@ export async function GET(request: Request) {
     const date_from = searchParams.get('date_from')
     const date_to = searchParams.get('date_to')
 
-    // TODO: Implement real database query when table is ready
-    const commissions: any[] = []
-
-    /* Real implementation when table is ready:
-    
-    let query = `
+    let queryText = `
       SELECT 
         bc.id,
         bc.buyer_code,
         b.buyer_name,
         bc.tracking_id,
-        bc.offer_id,
+        bc.deal_id,
+        bd.offer_id,
         o.offer_name,
         bc.commission_type,
         bc.commission_amount,
@@ -30,13 +26,11 @@ export async function GET(request: Request) {
         bc.approved_by,
         bc.approved_at,
         bc.payment_date,
-        bc.rejection_reason,
-        bc.period_month,
-        bc.period_year,
         bc.created_at
       FROM buyer_commissions bc
       JOIN buyers b ON bc.buyer_code = b.buyer_code
-      LEFT JOIN offers o ON bc.offer_id = o.offer_id
+      LEFT JOIN buyer_deals bd ON bc.deal_id = bd.id
+      LEFT JOIN offers o ON bd.offer_id = o.offer_id
     `
     
     const conditions = []
@@ -63,14 +57,13 @@ export async function GET(request: Request) {
     }
     
     if (conditions.length > 0) {
-      query += ` WHERE ${conditions.join(' AND ')}`
+      queryText += ` WHERE ${conditions.join(' AND ')}`
     }
     
-    query += ` ORDER BY bc.created_at DESC`
+    queryText += ` ORDER BY bc.created_at DESC`
     
-    const result = await sql.query(query, params)
-    commissions = result.rows
-    */
+    const result = await query(queryText, params)
+    const commissions = result.rows
 
     return NextResponse.json({
       success: true,
