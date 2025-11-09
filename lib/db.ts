@@ -1,28 +1,36 @@
-import { createPool, QueryResultRow, VercelPool } from '@vercel/postgres'
+import { Pool, QueryResult, QueryResultRow } from 'pg'
 
-let poolInstance: VercelPool | null = null
+let poolInstance: Pool | null = null
 
 // Lazy initialization of pool to avoid build-time errors
-function getPool(): VercelPool {
+function getPool(): Pool {
   if (!poolInstance) {
     const connectionString = process.env.POSTGRES_URL_NON_POOLING || process.env.POSTGRES_URL
     if (!connectionString) {
       throw new Error('Database connection string not configured')
     }
-    poolInstance = createPool({ connectionString })
+    poolInstance = new Pool({
+      connectionString,
+      max: 20,
+      idleTimeoutMillis: 30000,
+      connectionTimeoutMillis: 2000,
+    })
   }
   return poolInstance
 }
 
-// Main query function
-export async function query<T extends QueryResultRow = any>(text: string, params?: any[]) {
+// Main query function compatible with Vercel Postgres types
+export async function query<T extends QueryResultRow = any>(
+  text: string, 
+  params?: any[]
+): Promise<QueryResult<T>> {
   const pool = getPool()
-  const client = await pool.connect()
   try {
-    const result = await client.query<T>(text, params)
+    const result = await pool.query<T>(text, params)
     return result
-  } finally {
-    client.release()
+  } catch (error) {
+    console.error('Database query error:', error)
+    throw error
   }
 }
 
