@@ -40,6 +40,72 @@ const menuSections: MenuSection[] = [
     ]
   },
   {
+    id: 'n8n-management',
+    title: 'n8n Yönetimi',
+    icon: '⚡',
+    items: [
+      { label: 'n8n Dashboard', href: '/dashboard/n8n', icon: '📊' },
+      { label: 'Workflow\'lar', href: '/dashboard/n8n/workflows', icon: '🔄' },
+      { label: 'Webhook Logları', href: '/dashboard/n8n/webhooks', icon: '📨' },
+      { label: 'n8n Panel', href: 'https://n8n.dtektracking.com', icon: '⚙️' },
+      { label: 'Hata Logları', href: '/dashboard/n8n/errors', icon: '⚠️' },
+    ]
+  },
+  {
+    id: 'lead-management',
+    title: 'Lead Yönetimi',
+    icon: '📋',
+    items: [
+      { label: 'Lead Havuzu', href: '/dashboard/leads/pool', icon: '🗂️' },
+      { label: 'Paket Yönetimi', href: '/dashboard/leads/packages', icon: '📦' },
+      { label: 'Paket Geçmişi', href: '/dashboard/leads/history', icon: '📋' },
+      { label: 'Lead Raporları', href: '/dashboard/leads/reports', icon: '📊' },
+    ]
+  },
+  {
+    id: 'buyer-management',
+    title: 'Alıcı Yönetimi',
+    icon: '👥',
+    items: [
+      { label: 'Alıcı Listesi', href: '/dashboard/buyers', icon: '📇' },
+      { label: 'Yeni Alıcı Ekle', href: '/dashboard/buyers/new', icon: '➕' },
+      { label: 'Anlaşmalar', href: '/dashboard/buyers/deals', icon: '💰' },
+      { label: 'Alıcı Performansı', href: '/dashboard/buyers/performance', icon: '📊' },
+    ]
+  },
+  {
+    id: 'commission-management',
+    title: 'Komisyon Yönetimi',
+    icon: '💰',
+    items: [
+      { label: 'Komisyon Listesi', href: '/dashboard/commissions', icon: '💵' },
+      { label: 'Onay Bekleyenler', href: '/dashboard/commissions/pending', icon: '✅' },
+      { label: 'Ödeme Geçmişi', href: '/dashboard/commissions/paid', icon: '💸' },
+      { label: 'Komisyon Raporları', href: '/dashboard/commissions/reports', icon: '📊' },
+    ]
+  },
+  {
+    id: 'product-management',
+    title: 'Ürün Yönetimi',
+    icon: '📦',
+    items: [
+      { label: 'Ürün Listesi', href: '/dashboard/products', icon: '🏷️' },
+      { label: 'Yeni Ürün Ekle', href: '/dashboard/products/new', icon: '➕' },
+      { label: 'Ürün Performansı', href: '/dashboard/products/performance', icon: '📊' },
+    ]
+  },
+  {
+    id: 'reporting',
+    title: 'Raporlama',
+    icon: '📊',
+    items: [
+      { label: 'Genel Dashboard', href: '/dashboard/reports', icon: '📈' },
+      { label: 'Performans Raporları', href: '/dashboard/reports/performance', icon: '📉' },
+      { label: 'Finansal Raporlar', href: '/dashboard/reports/financial', icon: '💹' },
+      { label: 'Excel Export', href: '/dashboard/reports/export', icon: '📥' },
+    ]
+  },
+  {
     id: 'settings',
     title: 'Sistem Ayarları',
     icon: '⚙️',
@@ -71,6 +137,12 @@ export default function Sidebar() {
   const [expandedSections, setExpandedSections] = useState<{ [key: string]: boolean }>({
     traffic: true,
     sites: true,
+    'n8n-management': true,
+    'lead-management': true,
+    'buyer-management': true,
+    'commission-management': true,
+    'product-management': true,
+    'reporting': true,
     settings: true,
     'system-info': true,
   })
