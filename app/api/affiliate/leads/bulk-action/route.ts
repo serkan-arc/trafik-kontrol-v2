@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { sql } from '@vercel/postgres'
+import { query } from '@/lib/db'
+import { bulkProcessCommissions } from '@/lib/commission-calculator'
 
 export async function POST(request: NextRequest) {
   try {
@@ -15,11 +16,13 @@ export async function POST(request: NextRequest) {
 
     let newStatus: string
     let updateField = ''
+    let calculateCommission = false
 
     switch (action) {
       case 'approve':
         newStatus = 'approved_for_crm'
         updateField = 'approved_at = NOW()'
+        calculateCommission = true // Calculate CPL commissions
         break
       case 'hold':
         newStatus = 'on_hold'
@@ -32,6 +35,7 @@ export async function POST(request: NextRequest) {
         // For now, just mark as approved
         newStatus = 'approved_for_crm'
         updateField = 'approved_at = NOW()'
+        calculateCommission = true
         break
       default:
         return NextResponse.json(
@@ -41,7 +45,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Convert leadIds to SQL array format
-    const leadIdsArray = leadIds.map(id => parseInt(id)).filter(id => !isNaN(id))
+    const leadIdsArray = leadIds.map((id: any) => parseInt(id)).filter((id: number) => !isNaN(id))
 
     if (leadIdsArray.length === 0) {
       return NextResponse.json(
@@ -53,23 +57,45 @@ export async function POST(request: NextRequest) {
     // Update leads status
     const updateQuery = updateField
       ? `UPDATE n8n_leads 
-         SET status = '${newStatus}', 
+         SET status = $1, 
              ${updateField},
              updated_at = NOW()
-         WHERE id = ANY($1::int[])`
+         WHERE id = ANY($2::int[])`
       : `UPDATE n8n_leads 
-         SET status = '${newStatus}', 
+         SET status = $1, 
              updated_at = NOW()
-         WHERE id = ANY($1::int[])`
+         WHERE id = ANY($2::int[])`
 
-    await sql.query(updateQuery, [leadIdsArray])
+    await query(updateQuery, [newStatus, leadIdsArray])
 
-    return NextResponse.json({
+    // Calculate commissions if applicable
+    let commissionResult = null
+    if (calculateCommission) {
+      try {
+        commissionResult = await bulkProcessCommissions(leadIdsArray)
+        console.log(`Commission calculation: ${commissionResult.success} success, ${commissionResult.failed} failed`)
+      } catch (error) {
+        console.error('Commission calculation error:', error)
+        // Don't fail the entire request if commission calculation fails
+      }
+    }
+
+    const response: any = {
       success: true,
       message: `${leadIdsArray.length} lead güncellendi`,
       action,
       updatedCount: leadIdsArray.length
-    })
+    }
+
+    if (commissionResult) {
+      response.commissions = {
+        calculated: commissionResult.success,
+        failed: commissionResult.failed
+      }
+      response.message += ` | ${commissionResult.success} komisyon hesaplandı`
+    }
+
+    return NextResponse.json(response)
 
   } catch (error) {
     console.error('Bulk action error:', error)
