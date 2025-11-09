@@ -55,8 +55,8 @@ export default function PartnersPage() {
     total: partners.length,
     active: partners.filter(p => p.status === 'active').length,
     inactive: partners.filter(p => p.status === 'inactive').length,
-    totalLeads: partners.reduce((sum, p) => sum + (p.total_leads || 0), 0),
-    totalCommission: partners.reduce((sum, p) => sum + (p.pending_commission || 0), 0),
+    totalLeads: partners.reduce((sum, p) => sum + (Number(p.total_leads) || 0), 0),
+    totalCommission: partners.reduce((sum, p) => sum + (Number(p.pending_commission) || 0), 0),
   }
 
   return (

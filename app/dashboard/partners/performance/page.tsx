@@ -60,16 +60,16 @@ function PerformancePageContent() {
 
     switch (sortBy) {
       case 'leads':
-        aVal = a.total_leads
-        bVal = b.total_leads
+        aVal = Number(a.total_leads || 0)
+        bVal = Number(b.total_leads || 0)
         break
       case 'commission':
-        aVal = a.total_commission
-        bVal = b.total_commission
+        aVal = Number(a.pending_commission || 0)
+        bVal = Number(b.pending_commission || 0)
         break
       case 'conversion':
-        aVal = a.conversion_rate
-        bVal = b.conversion_rate
+        aVal = Number(a.conversion_rate || 0)
+        bVal = Number(b.conversion_rate || 0)
         break
       default:
         return 0
@@ -81,10 +81,10 @@ function PerformancePageContent() {
   // Overall stats
   const totalStats = {
     partners: performances.length,
-    totalLeads: performances.reduce((sum, p) => sum + p.total_leads, 0),
-    totalCommission: performances.reduce((sum, p) => sum + p.total_commission, 0),
+    totalLeads: performances.reduce((sum, p) => sum + Number(p.total_leads || 0), 0),
+    totalCommission: performances.reduce((sum, p) => sum + Number(p.pending_commission || 0), 0),
     avgConversion: performances.length > 0
-      ? performances.reduce((sum, p) => sum + p.conversion_rate, 0) / performances.length
+      ? performances.reduce((sum, p) => sum + Number(p.conversion_rate || 0), 0) / performances.length
       : 0,
   }
 
