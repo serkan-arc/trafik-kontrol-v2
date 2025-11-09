@@ -56,10 +56,9 @@ const menuSections: MenuSection[] = [
     title: 'Lead Yönetimi',
     icon: '📋',
     items: [
-      { label: 'Lead Havuzu', href: '/dashboard/leads/pool', icon: '🗂️' },
-      { label: 'Paket Yönetimi', href: '/dashboard/leads/packages', icon: '📦' },
-      { label: 'Paket Geçmişi', href: '/dashboard/leads/history', icon: '📋' },
-      { label: 'Lead Raporları', href: '/dashboard/leads/reports', icon: '📊' },
+      { label: 'Lead Havuzu', href: '/dashboard/affiliate/leads', icon: '🗂️' },
+      { label: 'Paket Yönetimi', href: '/dashboard/affiliate/packages', icon: '📦' },
+      { label: 'Hata Logları', href: '/dashboard/affiliate/errors', icon: '⚠️' },
     ]
   },
   {
