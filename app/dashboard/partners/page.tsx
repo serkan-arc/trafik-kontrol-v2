@@ -108,7 +108,7 @@ export default function PartnersPage() {
         />
         <StatCard
           title="Bekleyen Komisyon"
-          value={`€${stats.totalCommission.toFixed(2)}`}
+          value={`€${(Number(stats.totalCommission) || 0).toFixed(2)}`}
           icon="💰"
           color="yellow"
         />

@@ -374,7 +374,7 @@ function CommissionDisplay({ deal }: { deal: Deal }) {
   if (deal_type === 'CPA' && fixed_amount) {
     return (
       <div className="font-semibold text-blue-600">
-        {currency}{fixed_amount.toFixed(2)} /satış
+        {currency}{(Number(fixed_amount) || 0).toFixed(2)} /satış
       </div>
     )
   }
@@ -382,7 +382,7 @@ function CommissionDisplay({ deal }: { deal: Deal }) {
   if (deal_type === 'CPL' && fixed_amount) {
     return (
       <div className="font-semibold text-green-600">
-        {currency}{fixed_amount.toFixed(2)} /lead
+        {currency}{(Number(fixed_amount) || 0).toFixed(2)} /lead
       </div>
     )
   }
@@ -390,7 +390,7 @@ function CommissionDisplay({ deal }: { deal: Deal }) {
   if (deal_type === 'CPS' && percentage) {
     return (
       <div className="font-semibold text-purple-600">
-        %{percentage.toFixed(2)}
+        %{(Number(percentage) || 0).toFixed(2)}
       </div>
     )
   }
@@ -398,8 +398,8 @@ function CommissionDisplay({ deal }: { deal: Deal }) {
   if (deal_type === 'HYBRID' && lead_commission && sale_commission) {
     return (
       <div className="text-sm">
-        <div className="text-green-600">{currency}{lead_commission.toFixed(2)} /lead</div>
-        <div className="text-blue-600">{currency}{sale_commission.toFixed(2)} /satış</div>
+        <div className="text-green-600">{currency}{(Number(lead_commission) || 0).toFixed(2)} /lead</div>
+        <div className="text-blue-600">{currency}{(Number(sale_commission) || 0).toFixed(2)} /satış</div>
       </div>
     )
   }
@@ -407,7 +407,7 @@ function CommissionDisplay({ deal }: { deal: Deal }) {
   if (deal_type === 'REVSHARE' && percentage) {
     return (
       <div className="font-semibold text-pink-600">
-        %{percentage.toFixed(2)} /ay
+        %{(Number(percentage) || 0).toFixed(2)} /ay
       </div>
     )
   }

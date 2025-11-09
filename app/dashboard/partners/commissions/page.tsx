@@ -106,13 +106,13 @@ function CommissionsPageContent() {
     approved: commissions.filter(c => c.commission_status === 'approved').length,
     paid: commissions.filter(c => c.commission_status === 'paid').length,
     rejected: commissions.filter(c => c.commission_status === 'rejected').length,
-    totalAmount: commissions.reduce((sum, c) => sum + c.commission_amount, 0),
+    totalAmount: commissions.reduce((sum, c) => sum + Number(c.commission_amount || 0), 0),
     pendingAmount: commissions
       .filter(c => c.commission_status === 'pending')
-      .reduce((sum, c) => sum + c.commission_amount, 0),
+      .reduce((sum, c) => sum + Number(c.commission_amount || 0), 0),
     approvedAmount: commissions
       .filter(c => c.commission_status === 'approved')
-      .reduce((sum, c) => sum + c.commission_amount, 0),
+      .reduce((sum, c) => sum + Number(c.commission_amount || 0), 0),
   }
 
   const handleSelectAll = () => {
@@ -427,7 +427,7 @@ function CommissionsPageContent() {
                   </td>
                   <td className="px-4 py-3 text-right">
                     <p className="text-sm font-bold text-gray-900">
-                      {comm.currency}{comm.commission_amount.toFixed(2)}
+                      {comm.currency}{(Number(comm.commission_amount) || 0).toFixed(2)}
                     </p>
                   </td>
                   <td className="px-4 py-3 text-center">
@@ -589,7 +589,7 @@ function CommissionDetailModal({ commission, onClose, onUpdate }: any) {
             <DetailRow label="Komisyon Tipi" value={<CommissionTypeBadge type={commission.commission_type} />} />
             <DetailRow 
               label="Tutar" 
-              value={<span className="font-bold text-lg">{commission.currency}{commission.commission_amount.toFixed(2)}</span>} 
+              value={<span className="font-bold text-lg">{commission.currency}{(Number(commission.commission_amount) || 0).toFixed(2)}</span>} 
             />
             <DetailRow label="Durum" value={<CommissionStatusBadge status={commission.commission_status} />} />
             <DetailRow label="Oluşturulma" value={new Date(commission.created_at).toLocaleString('tr-TR')} />

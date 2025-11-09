@@ -469,7 +469,7 @@ export default function PartnerDetailPage() {
                     </div>
                     <div className="text-right">
                       <p className="text-sm font-bold text-gray-900">
-                        {commission.currency}{commission.commission_amount.toFixed(2)}
+                        {commission.currency}{(Number(commission.commission_amount) || 0).toFixed(2)}
                       </p>
                       <CommissionStatusBadge status={commission.commission_status} />
                     </div>

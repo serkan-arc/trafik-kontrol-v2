@@ -41,10 +41,10 @@ export default function PendingCommissionsPage() {
     }
   }
 
-  const totalAmount = commissions.reduce((sum, c) => sum + c.commission_amount, 0)
+  const totalAmount = commissions.reduce((sum, c) => sum + Number(c.commission_amount || 0), 0)
   const selectedAmount = commissions
     .filter(c => selectedIds.includes(c.id))
-    .reduce((sum, c) => sum + c.commission_amount, 0)
+    .reduce((sum, c) => sum + Number(c.commission_amount || 0), 0)
 
   const handleSelectAll = () => {
     if (selectedIds.length === commissions.length) {
@@ -251,7 +251,7 @@ export default function PendingCommissionsPage() {
                   </td>
                   <td className="px-4 py-3 text-right">
                     <p className="text-sm font-bold text-gray-900">
-                      {comm.currency}{comm.commission_amount.toFixed(2)}
+                      {comm.currency}{(Number(comm.commission_amount) || 0).toFixed(2)}
                     </p>
                   </td>
                   <td className="px-4 py-3 text-center text-sm text-gray-600">

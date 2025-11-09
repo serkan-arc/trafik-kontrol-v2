@@ -255,11 +255,11 @@ function PerformancePageContent() {
                     </div>
                     <div>
                       <p className="text-xs text-green-700">Ödenen</p>
-                      <p className="text-lg font-bold text-blue-600">€{perf.paid_commission.toFixed(2)}</p>
+                      <p className="text-lg font-bold text-blue-600">€{(Number(perf.paid_commission) || 0).toFixed(2)}</p>
                     </div>
                     <div>
                       <p className="text-xs text-green-700">Toplam</p>
-                      <p className="text-lg font-bold text-gray-900">€{perf.total_commission.toFixed(2)}</p>
+                      <p className="text-lg font-bold text-gray-900">€{(Number(perf.total_commission) || 0).toFixed(2)}</p>
                     </div>
                   </div>
                 </div>
@@ -268,11 +268,11 @@ function PerformancePageContent() {
                 <div className="grid grid-cols-3 gap-4">
                   <div className="text-center p-3 bg-blue-50 rounded-lg">
                     <p className="text-xs text-blue-700 mb-1">Conversion</p>
-                    <p className="text-xl font-bold text-blue-900">{perf.conversion_rate.toFixed(1)}%</p>
+                    <p className="text-xl font-bold text-blue-900">{(Number(perf.conversion_rate) || 0).toFixed(1)}%</p>
                   </div>
                   <div className="text-center p-3 bg-purple-50 rounded-lg">
                     <p className="text-xs text-purple-700 mb-1">Ort. Komisyon</p>
-                    <p className="text-xl font-bold text-purple-900">€{perf.avg_commission.toFixed(2)}</p>
+                    <p className="text-xl font-bold text-purple-900">€{(Number(perf.avg_commission) || 0).toFixed(2)}</p>
                   </div>
                   <div className="text-center p-3 bg-indigo-50 rounded-lg">
                     <p className="text-xs text-indigo-700 mb-1">Aktif Deal</p>

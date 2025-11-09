@@ -69,7 +69,7 @@ export default function PaidCommissionsPage() {
     return true
   })
 
-  const totalPaid = filteredCommissions.reduce((sum, c) => sum + c.commission_amount, 0)
+  const totalPaid = filteredCommissions.reduce((sum, c) => sum + Number(c.commission_amount || 0), 0)
 
   // Group by month
   const groupedByMonth: { [key: string]: Commission[] } = {}
@@ -194,7 +194,7 @@ export default function PaidCommissionsPage() {
           {sortedMonths.map(monthKey => {
             const [year, month] = monthKey.split('-')
             const monthCommissions = groupedByMonth[monthKey]
-            const monthTotal = monthCommissions.reduce((sum, c) => sum + c.commission_amount, 0)
+            const monthTotal = monthCommissions.reduce((sum, c) => sum + Number(c.commission_amount || 0), 0)
             const monthNames = ['', 'Ocak', 'Şubat', 'Mart', 'Nisan', 'Mayıs', 'Haziran', 'Temmuz', 'Ağustos', 'Eylül', 'Ekim', 'Kasım', 'Aralık']
 
             return (
@@ -237,7 +237,7 @@ export default function PaidCommissionsPage() {
                         </td>
                         <td className="px-4 py-3 text-right">
                           <p className="text-sm font-bold text-green-600">
-                            {comm.currency}{comm.commission_amount.toFixed(2)}
+                            {comm.currency}{(Number(comm.commission_amount) || 0).toFixed(2)}
                           </p>
                         </td>
                         <td className="px-4 py-3 text-center text-sm text-gray-600">
