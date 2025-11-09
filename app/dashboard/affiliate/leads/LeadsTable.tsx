@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useMemo } from 'react'
+import { useRouter } from 'next/navigation'
 
 interface Lead {
   id: number
@@ -53,6 +54,7 @@ function getStatusLabel(status: string) {
 }
 
 export default function LeadsTable({ leads }: LeadsTableProps) {
+  const router = useRouter()
   const [selectedLeads, setSelectedLeads] = useState<number[]>([])
   const [filterStatus, setFilterStatus] = useState<string>('all')
   const [filterAffiliate, setFilterAffiliate] = useState<string>('all')
@@ -158,17 +160,33 @@ export default function LeadsTable({ leads }: LeadsTableProps) {
     }
   }
 
+  const [showPackageModal, setShowPackageModal] = useState(false)
+
   const handleBulkAction = async (action: string) => {
     if (selectedLeads.length === 0) {
       alert('Lütfen en az bir lead seçin')
       return
     }
 
+    // Package action opens modal instead of direct API call
+    if (action === 'package') {
+      // Check if all selected leads are approved_for_crm
+      const selectedLeadObjects = filteredLeads.filter(l => selectedLeads.includes(l.id))
+      const notApproved = selectedLeadObjects.filter(l => l.status !== 'approved_for_crm')
+      
+      if (notApproved.length > 0) {
+        alert(`Sadece "Onaylı" durumundaki leadler paketlenebilir. ${notApproved.length} lead uygun değil.`)
+        return
+      }
+      
+      setShowPackageModal(true)
+      return
+    }
+
     const confirmMessages: { [key: string]: string } = {
       approve: `${selectedLeads.length} lead'i CRM için onaylamak istediğinize emin misiniz?`,
       hold: `${selectedLeads.length} lead'i bekletmek istediğinize emin misiniz?`,
-      reject: `${selectedLeads.length} lead'i reddetmek istediğinize emin misiniz?`,
-      package: `${selectedLeads.length} lead'i pakete eklemek istediğinize emin misiniz?`
+      reject: `${selectedLeads.length} lead'i reddetmek istediğinize emin misiniz?`
     }
 
     if (!confirm(confirmMessages[action])) return
@@ -716,6 +734,237 @@ export default function LeadsTable({ leads }: LeadsTableProps) {
         </div>
       </div>
     )}
+
+    {/* Package Creation Modal */}
+    {showPackageModal && (
+      <PackageModal
+        selectedLeads={selectedLeads}
+        leads={filteredLeads.filter(l => selectedLeads.includes(l.id))}
+        onClose={() => setShowPackageModal(false)}
+        onSuccess={() => {
+          setShowPackageModal(false)
+          setSelectedLeads([])
+          router.push('/dashboard/affiliate/packages')
+        }}
+      />
+    )}
     </>
+  )
+}
+
+// Package Creation Modal Component
+function PackageModal({ selectedLeads, leads, onClose, onSuccess }: any) {
+  const [loading, setLoading] = useState(false)
+  const [batchName, setBatchName] = useState('')
+  const [buyers, setBuyers] = useState<any[]>([])
+  const [offers, setOffers] = useState<any[]>([])
+
+  // Auto-detect buyer and offer if all leads have same values
+  const detectedBuyer = useMemo<string>(() => {
+    const buyerCodes = [...new Set(leads.map((l: any) => l.buyer_code).filter(Boolean))]
+    return (buyerCodes.length === 1 ? buyerCodes[0] : '') as string
+  }, [leads])
+
+  const detectedOffer = useMemo<string>(() => {
+    const offerIds = [...new Set(leads.map((l: any) => l.offer_id).filter(Boolean))]
+    return (offerIds.length === 1 ? offerIds[0] : '') as string
+  }, [leads])
+
+  const [selectedBuyer, setSelectedBuyer] = useState<string>(detectedBuyer)
+  const [selectedOffer, setSelectedOffer] = useState<string>(detectedOffer)
+
+  useState(() => {
+    setSelectedBuyer(detectedBuyer)
+    setSelectedOffer(detectedOffer)
+  })
+
+  useState(() => {
+    // Fetch buyers and offers
+    Promise.all([
+      fetch('/api/partners?status=active'),
+      fetch('/api/offers?status=active')
+    ]).then(async ([buyersRes, offersRes]) => {
+      if (buyersRes.ok) {
+        const data = await buyersRes.json()
+        setBuyers(data.partners || [])
+      }
+      if (offersRes.ok) {
+        const data = await offersRes.json()
+        setOffers(data.offers || [])
+      }
+    })
+  })
+
+  const handleCreate = async () => {
+    if (!batchName.trim()) {
+      alert('Paket adı zorunludur')
+      return
+    }
+
+    if (!selectedBuyer) {
+      alert('Partner seçimi zorunludur')
+      return
+    }
+
+    if (!selectedOffer) {
+      alert('Ürün seçimi zorunludur')
+      return
+    }
+
+    setLoading(true)
+
+    try {
+      const response = await fetch('/api/packages', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          batch_name: batchName,
+          buyer_code: selectedBuyer,
+          offer_id: selectedOffer,
+          lead_ids: leads.map((l: any) => l.tracking_id),
+          created_by: 'admin'
+        })
+      })
+
+      const data = await response.json()
+
+      if (response.ok && data.success) {
+        alert(`Paket başarıyla oluşturuldu! ${data.added_count} lead eklendi.`)
+        onSuccess()
+      } else {
+        alert('Hata: ' + (data.error || 'Paket oluşturulamadı'))
+      }
+    } catch (error) {
+      console.error('Package creation error:', error)
+      alert('Bir hata oluştu')
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  return (
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+      <div className="bg-white rounded-lg shadow-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+        <div className="p-6">
+          <div className="flex items-center justify-between mb-6">
+            <h2 className="text-2xl font-bold text-gray-900">📦 Yeni Paket Oluştur</h2>
+            <button
+              onClick={onClose}
+              className="text-gray-500 hover:text-gray-700"
+            >
+              ✕
+            </button>
+          </div>
+
+          <div className="space-y-4">
+            {/* Lead Count Info */}
+            <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+              <p className="text-blue-900 font-medium">
+                ✓ {selectedLeads.length} lead seçildi
+              </p>
+              <p className="text-sm text-blue-700 mt-1">
+                Tüm leadler "Onaylı" durumunda olmalıdır
+              </p>
+            </div>
+
+            {/* Batch Name */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Paket Adı *
+              </label>
+              <input
+                type="text"
+                value={batchName}
+                onChange={(e) => setBatchName(e.target.value)}
+                placeholder="Örn: Kasım 2024 - Feroxil Paketi"
+                className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              />
+            </div>
+
+            {/* Buyer Selection */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Partner *
+              </label>
+              <select
+                value={selectedBuyer}
+                onChange={(e) => setSelectedBuyer(e.target.value)}
+                className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              >
+                <option value="">Seçiniz...</option>
+                {buyers.map(b => (
+                  <option key={b.buyer_code} value={b.buyer_code}>
+                    {b.buyer_name} ({b.buyer_code})
+                  </option>
+                ))}
+              </select>
+              {detectedBuyer && (
+                <p className="text-xs text-green-600 mt-1">
+                  ✓ Otomatik tespit edildi
+                </p>
+              )}
+            </div>
+
+            {/* Offer Selection */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Ürün *
+              </label>
+              <select
+                value={selectedOffer}
+                onChange={(e) => setSelectedOffer(e.target.value)}
+                className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              >
+                <option value="">Seçiniz...</option>
+                {offers.map(o => (
+                  <option key={o.offer_id} value={o.offer_id}>
+                    {o.offer_name} ({o.offer_id})
+                  </option>
+                ))}
+              </select>
+              {detectedOffer && (
+                <p className="text-xs text-green-600 mt-1">
+                  ✓ Otomatik tespit edildi
+                </p>
+              )}
+            </div>
+
+            {/* Lead Preview */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Seçilen Leadler ({leads.length})
+              </label>
+              <div className="border border-gray-300 rounded-lg p-3 max-h-48 overflow-y-auto bg-gray-50">
+                {leads.map((lead: any) => (
+                  <div key={lead.id} className="text-xs text-gray-700 py-1 border-b border-gray-200 last:border-0">
+                    <span className="font-mono">{lead.tracking_id}</span>
+                    <span className="mx-2">|</span>
+                    <span>{lead.customer_name}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          {/* Actions */}
+          <div className="flex gap-3 justify-end pt-6 mt-6 border-t border-gray-200">
+            <button
+              onClick={onClose}
+              disabled={loading}
+              className="px-6 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors disabled:opacity-50"
+            >
+              İptal
+            </button>
+            <button
+              onClick={handleCreate}
+              disabled={loading}
+              className="px-6 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors disabled:opacity-50"
+            >
+              {loading ? 'Oluşturuluyor...' : '📦 Paketi Oluştur'}
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
   )
 }
