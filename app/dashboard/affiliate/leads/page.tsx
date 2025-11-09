@@ -1,5 +1,5 @@
 import { Suspense } from 'react'
-import { sql } from '@vercel/postgres'
+import { query } from '@/lib/db'
 import LeadsTable from './LeadsTable'
 
 interface Lead {
@@ -10,6 +10,8 @@ interface Lead {
   campaign_id: string | null
   site_domain: string | null
   buyer_code: string | null
+  offer_id: string | null
+  offer_name: string | null
   customer_name: string | null
   customer_phone: string | null
   customer_email: string | null
@@ -22,28 +24,31 @@ interface Lead {
 
 async function getLeads(): Promise<Lead[]> {
   try {
-    const { rows } = await sql`
+    const result = await query(`
       SELECT 
-        id,
-        tracking_id,
-        source,
-        affiliate_code,
-        campaign_id,
-        site_domain,
-        buyer_code,
-        customer_name,
-        customer_phone,
-        customer_email,
-        customer_address,
-        customer_country,
-        lead_data,
-        status,
-        created_at
-      FROM n8n_leads
-      ORDER BY created_at DESC
+        l.id,
+        l.tracking_id,
+        l.source,
+        l.affiliate_code,
+        l.campaign_id,
+        l.site_domain,
+        l.buyer_code,
+        l.offer_id,
+        o.offer_name,
+        l.customer_name,
+        l.customer_phone,
+        l.customer_email,
+        l.customer_address,
+        l.customer_country,
+        l.lead_data,
+        l.status,
+        l.created_at
+      FROM n8n_leads l
+      LEFT JOIN offers o ON l.offer_id = o.offer_id
+      ORDER BY l.created_at DESC
       LIMIT 500
-    `
-    return rows as Lead[]
+    `)
+    return result.rows as Lead[]
   } catch (error) {
     console.error('Error fetching leads:', error)
     return []
@@ -52,7 +57,7 @@ async function getLeads(): Promise<Lead[]> {
 
 async function getStats() {
   try {
-    const { rows } = await sql`
+    const result = await query(`
       SELECT 
         COUNT(*) as total,
         COUNT(CASE WHEN status = 'pending' THEN 1 END) as pending,
@@ -62,8 +67,8 @@ async function getStats() {
         COUNT(CASE WHEN status = 'on_hold' THEN 1 END) as on_hold,
         COUNT(CASE WHEN status = 'rejected' THEN 1 END) as rejected
       FROM n8n_leads
-    `
-    return rows[0]
+    `)
+    return result.rows[0]
   } catch (error) {
     console.error('Error fetching stats:', error)
     return {

@@ -10,6 +10,8 @@ interface Lead {
   campaign_id: string | null
   site_domain: string | null
   buyer_code: string | null
+  offer_id: string | null
+  offer_name: string | null
   customer_name: string | null
   customer_phone: string | null
   customer_email: string | null
@@ -58,6 +60,7 @@ export default function LeadsTable({ leads }: LeadsTableProps) {
   const [filterSite, setFilterSite] = useState<string>('all')
   const [filterCampaign, setFilterCampaign] = useState<string>('all')
   const [filterBuyer, setFilterBuyer] = useState<string>('all')
+  const [filterOffer, setFilterOffer] = useState<string>('all')
   const [filterDate, setFilterDate] = useState<string>('all')
   const [isProcessing, setIsProcessing] = useState(false)
   const [detailModalLead, setDetailModalLead] = useState<Lead | null>(null)
@@ -88,6 +91,11 @@ export default function LeadsTable({ leads }: LeadsTableProps) {
     return Array.from(unique).sort()
   }, [leads])
 
+  const offers = useMemo(() => {
+    const unique = new Set(leads.map(l => l.offer_name).filter((v): v is string => Boolean(v)))
+    return Array.from(unique).sort()
+  }, [leads])
+
   // Filter leads
   const filteredLeads = useMemo(() => {
     return leads.filter(lead => {
@@ -97,6 +105,7 @@ export default function LeadsTable({ leads }: LeadsTableProps) {
       if (filterSite !== 'all' && lead.site_domain !== filterSite) return false
       if (filterCampaign !== 'all' && lead.campaign_id !== filterCampaign) return false
       if (filterBuyer !== 'all' && lead.buyer_code !== filterBuyer) return false
+      if (filterOffer !== 'all' && lead.offer_name !== filterOffer) return false
       
       if (filterDate !== 'all') {
         const leadDate = new Date(lead.created_at)
@@ -131,7 +140,7 @@ export default function LeadsTable({ leads }: LeadsTableProps) {
       
       return true
     })
-  }, [leads, filterStatus, filterAffiliate, filterSource, filterSite, filterCampaign, filterBuyer, filterDate])
+  }, [leads, filterStatus, filterAffiliate, filterSource, filterSite, filterCampaign, filterBuyer, filterOffer, filterDate])
 
   const handleSelectAll = () => {
     if (selectedLeads.length === filteredLeads.length) {
@@ -200,7 +209,7 @@ export default function LeadsTable({ leads }: LeadsTableProps) {
         <div className="flex items-center gap-2 mb-3">
           <span className="text-sm font-medium text-gray-700">🔍 Filtrele:</span>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-7 gap-3">
+        <div className="grid grid-cols-1 md:grid-cols-4 lg:grid-cols-8 gap-3">
           <div>
             <label className="block text-xs text-gray-600 mb-1">Durum</label>
             <select
@@ -270,6 +279,20 @@ export default function LeadsTable({ leads }: LeadsTableProps) {
               <option value="all">Tümü</option>
               {buyers.map(buyer => (
                 <option key={buyer} value={buyer}>{buyer}</option>
+              ))}
+            </select>
+          </div>
+
+          <div>
+            <label className="block text-xs text-gray-600 mb-1">Ürün</label>
+            <select
+              value={filterOffer}
+              onChange={(e) => setFilterOffer(e.target.value)}
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            >
+              <option value="all">Tümü</option>
+              {offers.map(offer => (
+                <option key={offer} value={offer}>{offer}</option>
               ))}
             </select>
           </div>
@@ -431,6 +454,9 @@ export default function LeadsTable({ leads }: LeadsTableProps) {
                     Buyer
                   </th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Ürün
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                     Kaynak
                   </th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
@@ -496,6 +522,11 @@ export default function LeadsTable({ leads }: LeadsTableProps) {
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="text-sm font-semibold text-blue-700">
                         {lead.buyer_code || '-'}
+                      </div>
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <div className="text-sm font-medium text-green-700">
+                        {lead.offer_name || '-'}
                       </div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
