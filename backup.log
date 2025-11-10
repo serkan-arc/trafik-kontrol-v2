@@ -1,0 +1,19 @@
+🔄 Backup başlatılıyor: 20251109_030001
+📊 Database backup alınıyor...
+pg_dump: error: connection to server at "postgres.dtekai.com" (31.97.125.184), port 5432 failed: FATAL:  password authentication failed for user "postgres"
+💻 Kod backup alınıyor...
+[production d5905ae] auto-backup: 20251109_030001
+ 7 files changed, 1450 insertions(+), 1 deletion(-)
+ create mode 100644 app/api/affiliate/leads/bulk-action/route.ts
+ create mode 100644 app/dashboard/affiliate/errors/page.tsx
+ create mode 100644 app/dashboard/affiliate/leads/LeadsTable.tsx
+ create mode 100644 app/dashboard/affiliate/leads/page.tsx
+⚙️ Config dosyaları yedekleniyor...
+tar: Removing leading `/' from member names
+tar: Removing leading `/' from hard link targets
+🧹 Eski backuplar temizleniyor...
+✅ Backup tamamlandı!
+📁 Backup dizini: /home/root/webapp/backups
+💾 Toplam backup boyutu: 1.4M
+📋 Sistem durumu kaydedildi
+✨ Backup işlemi başarıyla tamamlandı: Sun Nov  9 03:00:04 CET 2025
